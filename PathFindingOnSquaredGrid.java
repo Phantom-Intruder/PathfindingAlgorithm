@@ -1,7 +1,6 @@
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Scanner;
+import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 /*************************************************************************
  *  Author: Dr E Kapetanios
@@ -15,6 +14,7 @@ public class PathFindingOnSquaredGrid {
     // of cells reachable from the top
     private static boolean[][] randomlyGenMatrix;
     private static Node[][] graph;
+    private static ArrayList<Node> nodesToGetToPath = new ArrayList<>();
 
     public static boolean[][] flow(boolean[][] open) {
         int N = open.length;
@@ -125,8 +125,86 @@ public class PathFindingOnSquaredGrid {
 
     //New code starts below
     public static void getManhattanDistance(int x, int y, int y1, int x1, int N){
+        getMovementCost(y1, x1, N);
+        findNextNodeToMoveTo(x, y, N);
+    }
+
+    private static void findNextNodeToMoveTo(int x, int y, int N) {
+
+        Node nextNodeToGoTo = getGValue(x, y);
+        if (nextNodeToGoTo == null){
+            return;
+        }
+        StdDraw.setXscale(-1, N);
+        StdDraw.setYscale(-1, N);
+        StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
+        StdDraw.filledSquare(nextNodeToGoTo.getxCoordinate(), N - nextNodeToGoTo.getyCoordinate()-1, .5);
+        nodesToGetToPath.add(nextNodeToGoTo);
+
+            goToNextNode(nextNodeToGoTo, N);
+        }
+
+    private static void goToNextNode(Node nextNodeToGoTo, int N) {
+        findNextNodeToMoveTo(nextNodeToGoTo.getxCoordinate(), nextNodeToGoTo.getyCoordinate(), N);
+    }
+
+    private static Node getGValue(int x, int y) {
+        int lineCost = 10;
+        int diagonalCost = 14;
+        ArrayList openList = new ArrayList();
+        Map<Node, Integer> dataMap = new HashMap<>();
+        Node minimumNode = null;
+        try {
+
+            openList.add(graph[x-1][y-1]);
+            dataMap.put(graph[x-1][y-1], graph[x-1][y-1].getMovementCost()+diagonalCost);
+            openList.add(graph[x-1][y]);
+            dataMap.put(graph[x-1][y], graph[x-1][y].getMovementCost()+lineCost);
+            openList.add(graph[x-1][y+1]);
+            dataMap.put(graph[x-1][y+1], graph[x-1][y+1].getMovementCost()+diagonalCost);
+            openList.add(graph[x][y+1]);
+            dataMap.put(graph[x][y+1], graph[x][y+1].getMovementCost()+lineCost);
+            openList.add(graph[x][y-1]);
+            dataMap.put(graph[x][y-1], graph[x][y-1].getMovementCost()+lineCost);
+            openList.add(graph[x+1][y-1]);
+            dataMap.put(graph[x+1][y-1], graph[x+1][y-1].getMovementCost()+diagonalCost);
+            openList.add(graph[x+1][y+1]);
+            dataMap.put(graph[x+1][y+1], graph[x+1][y+1].getMovementCost()+lineCost);
+            openList.add(graph[x+1][y]);
+            dataMap.put(graph[x+1][y], graph[x+1][y].getMovementCost()+diagonalCost);
+
+            List<Node> closedList = Arrays.asList(
+                    graph[x][y]
+            );
+        }catch (ArrayIndexOutOfBoundsException e){
+
+        }
+            Iterator it = dataMap.entrySet().iterator();
+            int minimumGValue = 1000;
+
+            while (it.hasNext()){
+                Map.Entry pair = (Map.Entry)it.next();
+                Node currentNode = (Node)pair.getKey();
+                if (currentNode.isFinalNode()){
+                    System.out.println("Final node has been found "+ currentNode.getxCoordinate()+ ", "+ currentNode.getyCoordinate());
+
+                    return null;
+                }
+                if (((int) pair.getValue()) < minimumGValue){
+                    minimumGValue = (int) pair.getValue();
+                    minimumNode = currentNode;
+                }
+                it.remove();
+            }
+            System.out.println(minimumGValue + "==" + minimumNode.nodeNumber);
+
+        return minimumNode;
+    }
+
+    private static void getMovementCost(int y1, int x1, int N) {
         int awayFromX=0;
         int awayFromY=0;
+        graph[x1][y1].setFinalNode(true);
         for (int i=0; i < N; i++){
             if (i > y1) {
                 awayFromY += 2;
@@ -149,7 +227,6 @@ public class PathFindingOnSquaredGrid {
             System.out.println();
             awayFromX=0;
         }
-
     }
 
     public static void getEuclideanDistance(int x, int y, int x1, int y1){
@@ -161,12 +238,13 @@ public class PathFindingOnSquaredGrid {
     }
 
     public static void getShortestPathAlgorithm(int N){
-        Queue<Node> nodeList = new LinkedList<>();
         graph = new Node[N][N];
         int k = 0;
         for (int i=0; i < N; i++){
             for (int j=0; j < N; j++){
                 graph[i][j] = new Node(randomlyGenMatrix[i][j], k);
+                graph[i][j].setxCoordinate(j);
+                graph[i][j].setyCoordinate(i);
                 k++;
             }
         }
@@ -180,7 +258,7 @@ public class PathFindingOnSquaredGrid {
         // The lower the second parameter, the more obstacles (black cells) are generated
 
         int N = 10;
-    	randomlyGenMatrix = random(N, 0.8);
+    	randomlyGenMatrix = random(N, 1);
     	
     	StdArrayIO.print(randomlyGenMatrix);
     	show(randomlyGenMatrix, true);
@@ -213,9 +291,21 @@ public class PathFindingOnSquaredGrid {
         System.out.println("Enter j for B > ");
         int Bj = in.nextInt();
 
+
         getShortestPathAlgorithm(N);
         getManhattanDistance(Ai, Aj, Bi, Bj, N);
-
+        for (Node n : nodesToGetToPath) {
+            if (n == null){
+                break;
+            }
+            StdDraw.setXscale(-1, N);
+            StdDraw.setYscale(-1, N);
+            StdDraw.setPenColor(StdDraw.RED);
+            StdDraw.filledSquare(n.getxCoordinate(), N - n.getyCoordinate()-1, .5);
+            StdDraw.setPenColor(StdDraw.GRAY);
+            //StdDraw.line(Ai, Aj, N-n.getxCoordinate(), n.getyCoordinate()-1);
+            System.out.print(n.nodeNumber + "--");
+        }
         // THIS IS AN EXAMPLE ONLY ON HOW TO USE THE JAVA INTERNAL WATCH
         // Stop the clock ticking in order to capture the time being spent on inputting the coordinates
     	// You should position this command accordingly in order to perform the algorithmic analysis
