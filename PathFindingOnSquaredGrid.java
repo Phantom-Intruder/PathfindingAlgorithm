@@ -17,6 +17,8 @@ public class PathFindingOnSquaredGrid {
     private static ArrayList<Node> nodesToGetToPath = new ArrayList<>();
     private static List<Node> closedList = new ArrayList<>();
     private static ArrayList openList = new ArrayList();;
+    private static int finalIPosition;
+    private static int finalJPosition;
     public static boolean[][] flow(boolean[][] open) {
         int N = open.length;
     
@@ -146,7 +148,7 @@ public class PathFindingOnSquaredGrid {
         }
 
     private static void goToNextNode(Node nextNodeToGoTo, int N) {
-        findNextNodeToMoveTo(nextNodeToGoTo.getxCoordinate(), nextNodeToGoTo.getyCoordinate(), N);
+        findNextNodeToMoveTo(nextNodeToGoTo.getyCoordinate(), nextNodeToGoTo.getxCoordinate(), N);
     }
 
     private static Node getGValue(int x, int y, int N) {
@@ -267,7 +269,9 @@ public class PathFindingOnSquaredGrid {
         int awayFromX=0;
         int awayFromY=0;
         int anchorPoint=0;
-        graph[x1][y1].setFinalNode(true);
+        graph[y1][x1].setFinalNode(true);
+        //finalIPosition = y1;
+
         for (int i=0; i < N; i++){
             if (i > y1) {
                 awayFromY += 2;
@@ -323,8 +327,8 @@ public class PathFindingOnSquaredGrid {
         // The following will generate a 10x10 squared grid with relatively few obstacles in it
         // The lower the second parameter, the more obstacles (black cells) are generated
 
-        int N = 8;
-    	randomlyGenMatrix = random(N, 1);
+        int N = 100;
+    	randomlyGenMatrix = random(N, 0.8);
     	
     	StdArrayIO.print(randomlyGenMatrix);
     	show(randomlyGenMatrix, true);
