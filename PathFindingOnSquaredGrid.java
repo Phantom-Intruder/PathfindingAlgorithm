@@ -159,229 +159,21 @@ public class PathFindingOnSquaredGrid {
         try {
             closedList.add(graph[x][y]);
             if (((x==0)&&(y==0)&& graph[x][y].data)){
-                openList.add(graph[x + 1][y + 1]);
-                dataMap.put(graph[x + 1][y + 1], graph[x + 1][y + 1].getMovementCost() + diagonalCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x + 1][y + 1].getxCoordinate(), N - graph[x + 1][y + 1].getyCoordinate()-1, .5);
-
-                openList.add(graph[x][y + 1]);
-                dataMap.put(graph[x][y + 1], graph[x][y + 1].getMovementCost() + diagonalCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x][y + 1].getxCoordinate(), N - graph[x][y + 1].getyCoordinate()-1, .5);
-
-                openList.add(graph[x + 1][y]);
-                dataMap.put(graph[x + 1][y], graph[x + 1][y].getMovementCost() + diagonalCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x + 1][y].getxCoordinate(), N - graph[x + 1][y].getyCoordinate()-1, .5);
+                handleInitialNode(x, y, N, diagonalCost, dataMap);
             }else if (((y==0)&&(x==N-1)&& graph[x][y].data)){
-                openList.add(graph[x][y + 1]);
-                dataMap.put(graph[x][y + 1], graph[x][y + 1].getMovementCost() + lineCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x][y + 1].getxCoordinate(), N - graph[x][y + 1].getyCoordinate()-1, .5);
-
-                openList.add(graph[x - 1][y]);
-                dataMap.put(graph[x - 1][y], graph[x - 1][y].getMovementCost() + diagonalCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x - 1][y].getxCoordinate(), N - graph[x - 1][y].getyCoordinate()-1, .5);
-
-                openList.add(graph[x - 1][y+1]);
-                dataMap.put(graph[x - 1][y + 1], graph[x - 1][y + 1].getMovementCost() + diagonalCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x - 1][y + 1].getxCoordinate(), N - graph[x - 1][y + 1].getyCoordinate()-1, .5);
+                handleBottomLeftNode(N, dataMap, graph[x][y + 1], graph[x][y + 1].getMovementCost() + graph[x][y + 1].getMovementCost() + lineCost, graph[x][y + 1].getxCoordinate(), N - graph[x][y + 1].getyCoordinate() - 1, graph[x - 1][y], graph[x - 1][y].getMovementCost() + diagonalCost, graph[x - 1][y].getxCoordinate(), N - graph[x - 1][y].getyCoordinate() - 1, graph[x - 1][y + 1], graph[x - 1][y + 1].getMovementCost() + diagonalCost, graph[x - 1][y + 1].getxCoordinate(), N - graph[x - 1][y + 1].getyCoordinate() - 1);
             }else if (((y==N-1)&&(x==N-1)&& graph[x][y].data)){
-                openList.add(graph[x - 1][y - 1]);
-                dataMap.put(graph[x - 1][y - 1], graph[x - 1][y - 1].getMovementCost() + diagonalCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x - 1][y - 1].getxCoordinate(), N - graph[x - 1][y - 1].getyCoordinate()-1, .5);
-
-                openList.add(graph[x][y - 1]);
-                dataMap.put(graph[x][y - 1], graph[x][y - 1].getMovementCost() + diagonalCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x][y - 1].getxCoordinate(), N - graph[x][y - 1].getyCoordinate()-1, .5);
-
-                openList.add(graph[x - 1][y]);
-                dataMap.put(graph[x - 1][y], graph[x - 1][y].getMovementCost() + diagonalCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x - 1][y].getxCoordinate(), N - graph[x - 1][y].getyCoordinate()-1, .5);
+                handleBottomLeftNode(N, dataMap, graph[x - 1][y - 1], graph[x - 1][y - 1].getMovementCost() + diagonalCost, graph[x - 1][y - 1].getxCoordinate(), N - graph[x - 1][y - 1].getyCoordinate()-1, graph[x][y - 1], graph[x][y - 1].getMovementCost() + diagonalCost, graph[x][y - 1].getxCoordinate(), N - graph[x][y - 1].getyCoordinate()-1, graph[x - 1][y], graph[x - 1][y].getMovementCost() + diagonalCost, graph[x - 1][y].getxCoordinate(), N - graph[x - 1][y].getyCoordinate()-1);
             }else if (((y==N-1)&&(x==0)&& graph[x][y].data)){
-                openList.add(graph[x + 1][y - 1]);
-                dataMap.put(graph[x + 1][y - 1], graph[x + 1][y - 1].getMovementCost() + diagonalCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x + 1][y - 1].getxCoordinate(), N - graph[x + 1][y - 1].getyCoordinate()-1, .5);
-
-                openList.add(graph[x][y - 1]);
-                dataMap.put(graph[x][y - 1], graph[x][y - 1].getMovementCost() + diagonalCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x][y - 1].getxCoordinate(), N - graph[x][y - 1].getyCoordinate()-1, .5);
-
-                openList.add(graph[x + 1][y]);
-                dataMap.put(graph[x + 1][y], graph[x + 1][y].getMovementCost() + diagonalCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x + 1][y].getxCoordinate(), N - graph[x + 1][y].getyCoordinate()-1, .5);
+                handleBottomLeftNode(N, dataMap, graph[x + 1][y - 1], graph[x + 1][y - 1].getMovementCost() + diagonalCost, graph[x + 1][y - 1].getxCoordinate(), N - graph[x + 1][y - 1].getyCoordinate()-1, graph[x][y - 1], graph[x][y - 1].getMovementCost() + diagonalCost, graph[x][y - 1].getxCoordinate(), N - graph[x][y - 1].getyCoordinate()-1, graph[x + 1][y], graph[x + 1][y].getMovementCost() + diagonalCost, graph[x + 1][y].getxCoordinate(), N - graph[x + 1][y].getyCoordinate()-1);
             }else if (((y==N-1)&& graph[x][y].data)){
-                openList.add(graph[x][y - 1]);
-                dataMap.put(graph[x][y - 1], graph[x][y - 1].getMovementCost() + diagonalCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x][y - 1].getxCoordinate(), N - graph[x][y - 1].getyCoordinate() - 1, .5);
-
-                openList.add(graph[x+1][y - 1]);
-                dataMap.put(graph[x+1][y - 1], graph[x+1][y - 1].getMovementCost() + lineCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x+1][y - 1].getxCoordinate(), N - graph[x+1][y - 1].getyCoordinate() - 1, .5);
-
-                openList.add(graph[x - 1][y - 1]);
-                dataMap.put(graph[x - 1][y - 1], graph[x - 1][y - 1].getMovementCost() + diagonalCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x - 1][y - 1].getxCoordinate(), N - graph[x - 1][y - 1].getyCoordinate()-1, .5);
-
-                openList.add(graph[x - 1][y]);
-                dataMap.put(graph[x - 1][y], graph[x - 1][y].getMovementCost() + lineCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x - 1][y].getxCoordinate(), N - graph[x - 1][y].getyCoordinate()-1, .5);
-
-                openList.add(graph[x + 1][y]);
-                dataMap.put(graph[x + 1][y], graph[x + 1][y].getMovementCost() + diagonalCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x + 1][y].getxCoordinate(), N - graph[x + 1][y].getyCoordinate()-1, .5);
+                handleRight(N, dataMap, graph[x][y - 1], graph[x][y - 1].getMovementCost() + diagonalCost, graph[x][y - 1].getxCoordinate(), N - graph[x][y - 1].getyCoordinate() - 1, graph[x + 1][y - 1], graph[x + 1][y - 1].getMovementCost() + lineCost, graph[x + 1][y - 1].getxCoordinate(), N - graph[x + 1][y - 1].getyCoordinate() - 1, graph[x - 1][y - 1], graph[x - 1][y - 1].getMovementCost() + diagonalCost, graph[x - 1][y - 1].getxCoordinate(), N - graph[x - 1][y - 1].getyCoordinate() - 1, graph[x - 1][y], graph[x - 1][y].getMovementCost() + lineCost, graph[x - 1][y].getxCoordinate(), N - graph[x - 1][y].getyCoordinate() - 1, graph[x + 1][y], graph[x + 1][y].getMovementCost() + diagonalCost, graph[x + 1][y].getxCoordinate(), N - graph[x + 1][y].getyCoordinate() - 1);
             }else if (((x==0)&& graph[x][y].data)){
-                openList.add(graph[x][y - 1]);
-                dataMap.put(graph[x][y - 1], graph[x][y - 1].getMovementCost() + diagonalCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x][y - 1].getxCoordinate(), N - graph[x][y - 1].getyCoordinate() - 1, .5);
-
-                openList.add(graph[x+1][y - 1]);
-                dataMap.put(graph[x+1][y - 1], graph[x+1][y - 1].getMovementCost() + lineCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x+1][y - 1].getxCoordinate(), N - graph[x+1][y - 1].getyCoordinate() - 1, .5);
-
-                openList.add(graph[x + 1][y + 1]);
-                dataMap.put(graph[x + 1][y + 1], graph[x + 1][y + 1].getMovementCost() + diagonalCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x + 1][y + 1].getxCoordinate(), N - graph[x + 1][y + 1].getyCoordinate()-1, .5);
-
-                openList.add(graph[x + 1][y]);
-                dataMap.put(graph[x + 1][y], graph[x + 1][y].getMovementCost() + lineCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x + 1][y].getxCoordinate(), N - graph[x + 1][y].getyCoordinate()-1, .5);
-
-                openList.add(graph[x][y + 1]);
-                dataMap.put(graph[x][y + 1], graph[x][y + 1].getMovementCost() + diagonalCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x][y + 1].getxCoordinate(), N - graph[x][y + 1].getyCoordinate()-1, .5);
+                handleRight(N, dataMap, graph[x][y - 1], graph[x][y - 1].getMovementCost() + diagonalCost, graph[x][y - 1].getxCoordinate(), N - graph[x][y - 1].getyCoordinate() - 1, graph[x+1][y - 1], graph[x+1][y - 1].getMovementCost() + lineCost, graph[x+1][y - 1].getxCoordinate(), N - graph[x+1][y - 1].getyCoordinate() - 1, graph[x + 1][y + 1], graph[x + 1][y + 1].getMovementCost() + diagonalCost, graph[x + 1][y + 1].getxCoordinate(), N - graph[x + 1][y + 1].getyCoordinate()-1, graph[x + 1][y], graph[x + 1][y].getMovementCost() + lineCost, graph[x + 1][y].getxCoordinate(), N - graph[x + 1][y].getyCoordinate()-1, graph[x][y + 1], graph[x][y + 1].getMovementCost() + diagonalCost, graph[x][y + 1].getxCoordinate(), N - graph[x][y + 1].getyCoordinate()-1);
             }else if (((x==N-1)&& graph[x][y].data)){
-                openList.add(graph[x][y + 1]);
-                dataMap.put(graph[x][y + 1], graph[x][y + 1].getMovementCost() + diagonalCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x][y + 1].getxCoordinate(), N - graph[x][y + 1].getyCoordinate() - 1, .5);
-
-                openList.add(graph[x][y - 1]);
-                dataMap.put(graph[x][y - 1], graph[x][y - 1].getMovementCost() + lineCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x][y - 1].getxCoordinate(), N - graph[x][y - 1].getyCoordinate() - 1, .5);
-
-                openList.add(graph[x - 1][y - 1]);
-                dataMap.put(graph[x - 1][y - 1], graph[x - 1][y - 1].getMovementCost() + diagonalCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x - 1][y - 1].getxCoordinate(), N - graph[x - 1][y - 1].getyCoordinate()-1, .5);
-
-                openList.add(graph[x - 1][y]);
-                dataMap.put(graph[x - 1][y], graph[x - 1][y].getMovementCost() + lineCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x - 1][y].getxCoordinate(), N - graph[x - 1][y].getyCoordinate()-1, .5);
-
-                openList.add(graph[x - 1][y + 1]);
-                dataMap.put(graph[x - 1][y + 1], graph[x - 1][y + 1].getMovementCost() + diagonalCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x - 1][y + 1].getxCoordinate(), N - graph[x - 1][y + 1].getyCoordinate()-1, .5);
+                handleRight(N, dataMap, graph[x][y + 1], graph[x][y + 1].getMovementCost() + diagonalCost, graph[x][y + 1].getxCoordinate(), N - graph[x][y + 1].getyCoordinate() - 1, graph[x][y - 1], graph[x][y - 1].getMovementCost() + lineCost, graph[x][y - 1].getxCoordinate(), N - graph[x][y - 1].getyCoordinate() - 1, graph[x - 1][y - 1], graph[x - 1][y - 1].getMovementCost() + diagonalCost, graph[x - 1][y - 1].getxCoordinate(), N - graph[x - 1][y - 1].getyCoordinate()-1, graph[x - 1][y], graph[x - 1][y].getMovementCost() + lineCost, graph[x - 1][y].getxCoordinate(), N - graph[x - 1][y].getyCoordinate()-1, graph[x - 1][y + 1], graph[x - 1][y + 1].getMovementCost() + diagonalCost, graph[x - 1][y + 1].getxCoordinate(), N - graph[x - 1][y + 1].getyCoordinate()-1);
             }else if(((y==0)&& graph[x][y].data)) {
-                openList.add(graph[x + 1][y + 1]);
-                dataMap.put(graph[x + 1][y + 1], graph[x + 1][y + 1].getMovementCost() + diagonalCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x + 1][y + 1].getxCoordinate(), N - graph[x + 1][y + 1].getyCoordinate() - 1, .5);
-
-                openList.add(graph[x][y + 1]);
-                dataMap.put(graph[x][y + 1], graph[x][y + 1].getMovementCost() + diagonalCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x][y + 1].getxCoordinate(), N - graph[x][y + 1].getyCoordinate() - 1, .5);
-
-                openList.add(graph[x + 1][y]);
-                dataMap.put(graph[x + 1][y], graph[x + 1][y].getMovementCost() + diagonalCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x + 1][y].getxCoordinate(), N - graph[x + 1][y].getyCoordinate() - 1, .5);
-
-                openList.add(graph[x + 1][y - 1]);
-                dataMap.put(graph[x + 1][y - 1], graph[x + 1][y - 1].getMovementCost() + diagonalCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x + 1][y - 1].getxCoordinate(), N - graph[x + 1][y - 1].getyCoordinate() - 1, .5);
-
-                openList.add(graph[x][y - 1]);
-                dataMap.put(graph[x][y - 1], graph[x][y - 1].getMovementCost() + lineCost);
-                StdDraw.setXscale(-1, N);
-                StdDraw.setYscale(-1, N);
-                StdDraw.setPenColor(StdDraw.GREEN);
-                StdDraw.filledSquare(graph[x][y - 1].getxCoordinate(), N - graph[x][y - 1].getyCoordinate() - 1, .5);
+                handleLeft(x, y, N, lineCost, diagonalCost, dataMap);
             }else{
                 if (validationIsPassed(graph[x - 1][y - 1])) {
                     openList.add(graph[x - 1][y - 1]);
@@ -477,6 +269,69 @@ public class PathFindingOnSquaredGrid {
         }
 
         return minimumNode;
+    }
+
+    private static void handleLeft(int x, int y, int N, int lineCost, int diagonalCost, Map<Node, Integer> dataMap) {
+        handleInitialNode(x, y, N, diagonalCost, dataMap);
+
+        openList.add(graph[x + 1][y - 1]);
+        dataMap.put(graph[x + 1][y - 1], graph[x + 1][y - 1].getMovementCost() + diagonalCost);
+        StdDraw.setXscale(-1, N);
+        StdDraw.setYscale(-1, N);
+        StdDraw.setPenColor(StdDraw.GREEN);
+        StdDraw.filledSquare(graph[x + 1][y - 1].getxCoordinate(), N - graph[x + 1][y - 1].getyCoordinate() - 1, .5);
+
+        openList.add(graph[x][y - 1]);
+        dataMap.put(graph[x][y - 1], graph[x][y - 1].getMovementCost() + lineCost);
+        StdDraw.setXscale(-1, N);
+        StdDraw.setYscale(-1, N);
+        StdDraw.setPenColor(StdDraw.GREEN);
+        StdDraw.filledSquare(graph[x][y - 1].getxCoordinate(), N - graph[x][y - 1].getyCoordinate() - 1, .5);
+    }
+
+    private static void handleRight(int N, Map<Node, Integer> dataMap, Node e, int value, int x2, int y2, Node e2, int value2, int x3, int y3, Node e3, int value3, int x4, int y4, Node e4, int value4, int x5, int y5, Node e5, int value5, int x6, int y6) {
+        handleBottomLeftNode(N, dataMap, e, value, x2, y2, e2, value2, x3, y3, e3, value3, x4, y4);
+
+        openList.add(e4);
+        dataMap.put(e4, value4);
+        StdDraw.setXscale(-1, N);
+        StdDraw.setYscale(-1, N);
+        StdDraw.setPenColor(StdDraw.GREEN);
+        StdDraw.filledSquare(x5, y5, .5);
+
+        openList.add(e5);
+        dataMap.put(e5, value5);
+        StdDraw.setXscale(-1, N);
+        StdDraw.setYscale(-1, N);
+        StdDraw.setPenColor(StdDraw.GREEN);
+        StdDraw.filledSquare(x6, y6, .5);
+    }
+
+    private static void handleBottomLeftNode(int N, Map<Node, Integer> dataMap, Node e, int value, int x2, int y2, Node e2, int value2, int x3, int y3, Node e3, int value3, int x4, int y4) {
+        openList.add(e);
+        dataMap.put(e, value);
+        StdDraw.setXscale(-1, N);
+        StdDraw.setYscale(-1, N);
+        StdDraw.setPenColor(StdDraw.GREEN);
+        StdDraw.filledSquare(x2, y2, .5);
+
+        openList.add(e2);
+        dataMap.put(e2, value2);
+        StdDraw.setXscale(-1, N);
+        StdDraw.setYscale(-1, N);
+        StdDraw.setPenColor(StdDraw.GREEN);
+        StdDraw.filledSquare(x3, y3, .5);
+
+        openList.add(e3);
+        dataMap.put(e3, value3);
+        StdDraw.setXscale(-1, N);
+        StdDraw.setYscale(-1, N);
+        StdDraw.setPenColor(StdDraw.GREEN);
+        StdDraw.filledSquare(x4, y4, .5);
+    }
+
+    private static void handleInitialNode(int x, int y, int N, int diagonalCost, Map<Node, Integer> dataMap) {
+        handleBottomLeftNode(N, dataMap, graph[x + 1][y + 1], graph[x + 1][y + 1].getMovementCost() + diagonalCost, graph[x + 1][y + 1].getxCoordinate(), N - graph[x + 1][y + 1].getyCoordinate()-1, graph[x][y + 1], graph[x][y + 1].getMovementCost() + diagonalCost, graph[x][y + 1].getxCoordinate(), N - graph[x][y + 1].getyCoordinate()-1, graph[x + 1][y], graph[x + 1][y].getMovementCost() + diagonalCost, graph[x + 1][y].getxCoordinate(), N - graph[x + 1][y].getyCoordinate()-1);
     }
 
     private static boolean validationIsPassed(Node o) {
