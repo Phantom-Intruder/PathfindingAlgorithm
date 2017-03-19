@@ -15,7 +15,8 @@ public class PathFindingOnSquaredGrid {
     private static boolean[][] randomlyGenMatrix;
     private static Node[][] graph;
     private static ArrayList<Node> nodesToGetToPath = new ArrayList<>();
-
+    private static List<Node> closedList = new ArrayList<>();
+    private static ArrayList openList = new ArrayList();;
     public static boolean[][] flow(boolean[][] open) {
         int N = open.length;
     
@@ -131,7 +132,7 @@ public class PathFindingOnSquaredGrid {
 
     private static void findNextNodeToMoveTo(int x, int y, int N) {
 
-        Node nextNodeToGoTo = getGValue(x, y);
+        Node nextNodeToGoTo = getGValue(x, y, N);
         if (nextNodeToGoTo == null){
             return;
         }
@@ -148,34 +149,80 @@ public class PathFindingOnSquaredGrid {
         findNextNodeToMoveTo(nextNodeToGoTo.getxCoordinate(), nextNodeToGoTo.getyCoordinate(), N);
     }
 
-    private static Node getGValue(int x, int y) {
+    private static Node getGValue(int x, int y, int N) {
         int lineCost = 10;
         int diagonalCost = 14;
-        ArrayList openList = new ArrayList();
         Map<Node, Integer> dataMap = new HashMap<>();
         Node minimumNode = null;
         try {
+            closedList.add(graph[x][y]);
 
-            openList.add(graph[x-1][y-1]);
-            dataMap.put(graph[x-1][y-1], graph[x-1][y-1].getMovementCost()+diagonalCost);
-            openList.add(graph[x-1][y]);
-            dataMap.put(graph[x-1][y], graph[x-1][y].getMovementCost()+lineCost);
-            openList.add(graph[x-1][y+1]);
-            dataMap.put(graph[x-1][y+1], graph[x-1][y+1].getMovementCost()+diagonalCost);
-            openList.add(graph[x][y+1]);
-            dataMap.put(graph[x][y+1], graph[x][y+1].getMovementCost()+lineCost);
-            openList.add(graph[x][y-1]);
-            dataMap.put(graph[x][y-1], graph[x][y-1].getMovementCost()+lineCost);
-            openList.add(graph[x+1][y-1]);
-            dataMap.put(graph[x+1][y-1], graph[x+1][y-1].getMovementCost()+diagonalCost);
-            openList.add(graph[x+1][y+1]);
-            dataMap.put(graph[x+1][y+1], graph[x+1][y+1].getMovementCost()+lineCost);
-            openList.add(graph[x+1][y]);
-            dataMap.put(graph[x+1][y], graph[x+1][y].getMovementCost()+diagonalCost);
+            if (validationIsPassed(graph[x - 1][y - 1])) {
+                openList.add(graph[x - 1][y - 1]);
+                dataMap.put(graph[x - 1][y - 1], graph[x - 1][y - 1].getMovementCost() + diagonalCost);
+                StdDraw.setXscale(-1, N);
+                StdDraw.setYscale(-1, N);
+                StdDraw.setPenColor(StdDraw.GREEN);
+                StdDraw.filledSquare(graph[x - 1][y - 1].getxCoordinate(), N - graph[x - 1][y - 1].getyCoordinate()-1, .5);
+            }
+            if (validationIsPassed(graph[x-1][y])) {
+                openList.add(graph[x - 1][y]);
+                dataMap.put(graph[x - 1][y], graph[x - 1][y].getMovementCost() + lineCost);
+                StdDraw.setXscale(-1, N);
+                StdDraw.setYscale(-1, N);
+                StdDraw.setPenColor(StdDraw.GREEN);
+                StdDraw.filledSquare(graph[x - 1][y].getxCoordinate(), N - graph[x - 1][y].getyCoordinate()-1, .5);
+            }
+            if (validationIsPassed(graph[x-1][y+1])) {
+                openList.add(graph[x - 1][y + 1]);
+                dataMap.put(graph[x - 1][y + 1], graph[x - 1][y + 1].getMovementCost() + diagonalCost);
+                StdDraw.setXscale(-1, N);
+                StdDraw.setYscale(-1, N);
+                StdDraw.setPenColor(StdDraw.GREEN);
+                StdDraw.filledSquare(graph[x - 1][y + 1].getxCoordinate(), N - graph[x - 1][y + 1].getyCoordinate()-1, .5);
+            }
+            if (validationIsPassed(graph[x][y+1])) {
+                openList.add(graph[x][y + 1]);
+                dataMap.put(graph[x][y + 1], graph[x][y + 1].getMovementCost() + lineCost);
+                StdDraw.setXscale(-1, N);
+                StdDraw.setYscale(-1, N);
+                StdDraw.setPenColor(StdDraw.GREEN);
+                StdDraw.filledSquare(graph[x][y + 1].getxCoordinate(), N - graph[x][y + 1].getyCoordinate()-1, .5);
+            }
+            if (validationIsPassed(graph[x][y-1])) {
+                openList.add(graph[x][y - 1]);
+                dataMap.put(graph[x][y - 1], graph[x][y - 1].getMovementCost() + lineCost);
+                StdDraw.setXscale(-1, N);
+                StdDraw.setYscale(-1, N);
+                StdDraw.setPenColor(StdDraw.GREEN);
+                StdDraw.filledSquare(graph[x][y - 1].getxCoordinate(), N - graph[x][y - 1].getyCoordinate()-1, .5);
+            }
+            if (validationIsPassed(graph[x+1][y-1])) {
+                openList.add(graph[x + 1][y - 1]);
+                dataMap.put(graph[x + 1][y - 1], graph[x + 1][y - 1].getMovementCost() + diagonalCost);
+                StdDraw.setXscale(-1, N);
+                StdDraw.setYscale(-1, N);
+                StdDraw.setPenColor(StdDraw.GREEN);
+                StdDraw.filledSquare(graph[x + 1][y - 1].getxCoordinate(), N - graph[x + 1][y - 1].getyCoordinate()-1, .5);
+            }
+            if (validationIsPassed(graph[x+1][y+1])) {
+                openList.add(graph[x + 1][y + 1]);
+                dataMap.put(graph[x + 1][y + 1], graph[x + 1][y + 1].getMovementCost() + lineCost);
+                StdDraw.setXscale(-1, N);
+                StdDraw.setYscale(-1, N);
+                StdDraw.setPenColor(StdDraw.GREEN);
+                StdDraw.filledSquare(graph[x + 1][y + 1].getxCoordinate(), N - graph[x + 1][y + 1].getyCoordinate()-1, .5);
+            }
+            if (validationIsPassed(graph[x+1][y])) {
+                openList.add(graph[x + 1][y]);
+                dataMap.put(graph[x + 1][y], graph[x + 1][y].getMovementCost() + diagonalCost);
+                StdDraw.setXscale(-1, N);
+                StdDraw.setYscale(-1, N);
+                StdDraw.setPenColor(StdDraw.GREEN);
+                StdDraw.filledSquare(graph[x + 1][y].getxCoordinate(), N - graph[x + 1][y].getyCoordinate()-1, .5);
+            }
 
-            List<Node> closedList = Arrays.asList(
-                    graph[x][y]
-            );
+
         }catch (ArrayIndexOutOfBoundsException e){
 
         }
@@ -185,6 +232,8 @@ public class PathFindingOnSquaredGrid {
             while (it.hasNext()){
                 Map.Entry pair = (Map.Entry)it.next();
                 Node currentNode = (Node)pair.getKey();
+                if (currentNode == null)
+                    continue;
                 if (currentNode.isFinalNode()){
                     System.out.println("Final node has been found "+ currentNode.getxCoordinate()+ ", "+ currentNode.getyCoordinate());
 
@@ -196,14 +245,28 @@ public class PathFindingOnSquaredGrid {
                 }
                 it.remove();
             }
+        if (minimumNode != null) {
             System.out.println(minimumGValue + "==" + minimumNode.nodeNumber);
+        }
 
         return minimumNode;
+    }
+
+    private static boolean validationIsPassed(Node o) {
+        boolean validationFlag;
+        try {
+            validationFlag = !((closedList.contains(o)) || (!o.data));
+        }catch (Exception e){
+            validationFlag = false;
+        }
+
+        return validationFlag;
     }
 
     private static void getMovementCost(int y1, int x1, int N) {
         int awayFromX=0;
         int awayFromY=0;
+        int anchorPoint=0;
         graph[x1][y1].setFinalNode(true);
         for (int i=0; i < N; i++){
             if (i > y1) {
@@ -212,11 +275,14 @@ public class PathFindingOnSquaredGrid {
             for (int j=0; j < N; j++){
                 int movementCost;
 
-                if (j >= x1){
+                if (j > x1){
                     awayFromX++;
-                    movementCost = (x1+awayFromX)-i;
+                    movementCost = (anchorPoint+awayFromX);
                 }else {
                     movementCost = (x1 - j) + (y1 - i);
+                    if (j == x1){
+                        anchorPoint = movementCost;
+                    }
                 }
                 if (i > y1){
                     movementCost += awayFromY;
@@ -257,7 +323,7 @@ public class PathFindingOnSquaredGrid {
         // The following will generate a 10x10 squared grid with relatively few obstacles in it
         // The lower the second parameter, the more obstacles (black cells) are generated
 
-        int N = 10;
+        int N = 8;
     	randomlyGenMatrix = random(N, 1);
     	
     	StdArrayIO.print(randomlyGenMatrix);
