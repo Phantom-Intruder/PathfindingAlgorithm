@@ -1,4 +1,3 @@
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 
@@ -159,91 +158,84 @@ public class PathFindingOnSquaredGrid {
         try {
             closedList.add(graph[x][y]);
             if (((x==0)&&(y==0)&& graph[x][y].data)){
-                handleInitialNode(x, y, N, diagonalCost, dataMap);
+                checkBottomRight(graph[x + 1][y + 1], N, graph[x + 1][y + 1].getMovementCost() + diagonalCost, dataMap);
+
+                checkBottom(graph[x][y + 1], N, graph[x][y + 1].getMovementCost() + lineCost, dataMap);
+
+                checkRight(graph[x + 1][y], N, graph[x + 1][y].getMovementCost() + lineCost, dataMap);
             }else if (((y==0)&&(x==N-1)&& graph[x][y].data)){
-                handleBottomLeftNode(N, dataMap, graph[x][y + 1], graph[x][y + 1].getMovementCost() + graph[x][y + 1].getMovementCost() + lineCost, graph[x][y + 1].getxCoordinate(), N - graph[x][y + 1].getyCoordinate() - 1, graph[x - 1][y], graph[x - 1][y].getMovementCost() + diagonalCost, graph[x - 1][y].getxCoordinate(), N - graph[x - 1][y].getyCoordinate() - 1, graph[x - 1][y + 1], graph[x - 1][y + 1].getMovementCost() + diagonalCost, graph[x - 1][y + 1].getxCoordinate(), N - graph[x - 1][y + 1].getyCoordinate() - 1);
+                checkBottom(graph[x][y + 1], N, graph[x][y + 1].getMovementCost() + lineCost, dataMap);
+
+                checkLeft(graph[x - 1][y], N, graph[x - 1][y].getMovementCost() + lineCost, dataMap);
+
+                checkBottomLeft(graph[x - 1][y + 1], N, graph[x - 1][y + 1].getMovementCost() + diagonalCost, dataMap);
             }else if (((y==N-1)&&(x==N-1)&& graph[x][y].data)){
-                handleBottomLeftNode(N, dataMap, graph[x - 1][y - 1], graph[x - 1][y - 1].getMovementCost() + diagonalCost, graph[x - 1][y - 1].getxCoordinate(), N - graph[x - 1][y - 1].getyCoordinate()-1, graph[x][y - 1], graph[x][y - 1].getMovementCost() + diagonalCost, graph[x][y - 1].getxCoordinate(), N - graph[x][y - 1].getyCoordinate()-1, graph[x - 1][y], graph[x - 1][y].getMovementCost() + diagonalCost, graph[x - 1][y].getxCoordinate(), N - graph[x - 1][y].getyCoordinate()-1);
+                checkTopLeft(graph[x - 1][y - 1], N, graph[x - 1][y - 1].getMovementCost() + diagonalCost, dataMap);
+
+                checkTop(graph[x][y - 1], N, graph[x][y - 1].getMovementCost() + lineCost, dataMap);
+
+                checkLeft(graph[x - 1][y], N, graph[x - 1][y].getMovementCost() + lineCost, dataMap);
             }else if (((y==N-1)&&(x==0)&& graph[x][y].data)){
-                handleBottomLeftNode(N, dataMap, graph[x + 1][y - 1], graph[x + 1][y - 1].getMovementCost() + diagonalCost, graph[x + 1][y - 1].getxCoordinate(), N - graph[x + 1][y - 1].getyCoordinate()-1, graph[x][y - 1], graph[x][y - 1].getMovementCost() + diagonalCost, graph[x][y - 1].getxCoordinate(), N - graph[x][y - 1].getyCoordinate()-1, graph[x + 1][y], graph[x + 1][y].getMovementCost() + diagonalCost, graph[x + 1][y].getxCoordinate(), N - graph[x + 1][y].getyCoordinate()-1);
+                checkTopRight(graph[x + 1][y - 1], N, graph[x + 1][y - 1].getMovementCost() + diagonalCost, dataMap);
+
+                checkTop(graph[x][y - 1], N, graph[x][y - 1].getMovementCost() + lineCost, dataMap);
+
+                checkRight(graph[x + 1][y], N, graph[x + 1][y].getMovementCost() + diagonalCost, dataMap);
             }else if (((y==N-1)&& graph[x][y].data)){
-                handleRight(N, dataMap, graph[x][y - 1], graph[x][y - 1].getMovementCost() + diagonalCost, graph[x][y - 1].getxCoordinate(), N - graph[x][y - 1].getyCoordinate() - 1, graph[x + 1][y - 1], graph[x + 1][y - 1].getMovementCost() + lineCost, graph[x + 1][y - 1].getxCoordinate(), N - graph[x + 1][y - 1].getyCoordinate() - 1, graph[x - 1][y - 1], graph[x - 1][y - 1].getMovementCost() + diagonalCost, graph[x - 1][y - 1].getxCoordinate(), N - graph[x - 1][y - 1].getyCoordinate() - 1, graph[x - 1][y], graph[x - 1][y].getMovementCost() + lineCost, graph[x - 1][y].getxCoordinate(), N - graph[x - 1][y].getyCoordinate() - 1, graph[x + 1][y], graph[x + 1][y].getMovementCost() + diagonalCost, graph[x + 1][y].getxCoordinate(), N - graph[x + 1][y].getyCoordinate() - 1);
+                checkTop(graph[x][y - 1], N, graph[x][y - 1].getMovementCost() + lineCost, dataMap);
+
+                checkTopRight(graph[x + 1][y - 1], N, graph[x + 1][y - 1].getMovementCost() + diagonalCost, dataMap);
+
+                checkTopLeft(graph[x - 1][y - 1], N, graph[x - 1][y - 1].getMovementCost() + diagonalCost, dataMap);
+
+                checkLeft(graph[x - 1][y], N, graph[x - 1][y].getMovementCost() + lineCost, dataMap);
+
+                checkRight(graph[x + 1][y], N, graph[x + 1][y].getMovementCost() + diagonalCost, dataMap);
             }else if (((x==0)&& graph[x][y].data)){
-                handleRight(N, dataMap, graph[x][y - 1], graph[x][y - 1].getMovementCost() + diagonalCost, graph[x][y - 1].getxCoordinate(), N - graph[x][y - 1].getyCoordinate() - 1, graph[x+1][y - 1], graph[x+1][y - 1].getMovementCost() + lineCost, graph[x+1][y - 1].getxCoordinate(), N - graph[x+1][y - 1].getyCoordinate() - 1, graph[x + 1][y + 1], graph[x + 1][y + 1].getMovementCost() + diagonalCost, graph[x + 1][y + 1].getxCoordinate(), N - graph[x + 1][y + 1].getyCoordinate()-1, graph[x + 1][y], graph[x + 1][y].getMovementCost() + lineCost, graph[x + 1][y].getxCoordinate(), N - graph[x + 1][y].getyCoordinate()-1, graph[x][y + 1], graph[x][y + 1].getMovementCost() + diagonalCost, graph[x][y + 1].getxCoordinate(), N - graph[x][y + 1].getyCoordinate()-1);
+
+                checkTop(graph[x][y - 1], N, graph[x][y - 1].getMovementCost() + lineCost, dataMap);
+
+                checkTopRight(graph[x + 1][y - 1], N, graph[x + 1][y - 1].getMovementCost() + diagonalCost, dataMap);
+
+                checkBottomRight(graph[x + 1][y + 1], N, graph[x + 1][y + 1].getMovementCost() + diagonalCost, dataMap);
+
+                checkRight(graph[x + 1][y], N, graph[x + 1][y].getMovementCost() + lineCost, dataMap);
+
+                checkBottom(graph[x][y + 1], N, graph[x][y + 1].getMovementCost() + lineCost, dataMap);
             }else if (((x==N-1)&& graph[x][y].data)){
-                handleRight(N, dataMap, graph[x][y + 1], graph[x][y + 1].getMovementCost() + diagonalCost, graph[x][y + 1].getxCoordinate(), N - graph[x][y + 1].getyCoordinate() - 1, graph[x][y - 1], graph[x][y - 1].getMovementCost() + lineCost, graph[x][y - 1].getxCoordinate(), N - graph[x][y - 1].getyCoordinate() - 1, graph[x - 1][y - 1], graph[x - 1][y - 1].getMovementCost() + diagonalCost, graph[x - 1][y - 1].getxCoordinate(), N - graph[x - 1][y - 1].getyCoordinate()-1, graph[x - 1][y], graph[x - 1][y].getMovementCost() + lineCost, graph[x - 1][y].getxCoordinate(), N - graph[x - 1][y].getyCoordinate()-1, graph[x - 1][y + 1], graph[x - 1][y + 1].getMovementCost() + diagonalCost, graph[x - 1][y + 1].getxCoordinate(), N - graph[x - 1][y + 1].getyCoordinate()-1);
+                checkBottom(graph[x][y + 1], N, graph[x][y + 1].getMovementCost() + lineCost, dataMap);
+
+                checkTop(graph[x][y - 1], N, graph[x][y - 1].getMovementCost() + lineCost, dataMap);
+
+                checkTopLeft(graph[x - 1][y - 1], N, graph[x - 1][y - 1].getMovementCost() + diagonalCost, dataMap);
+
+                checkLeft(graph[x - 1][y], N, graph[x - 1][y].getMovementCost() + lineCost, dataMap);
+
+                checkBottomLeft(graph[x - 1][y + 1], N, graph[x - 1][y + 1].getMovementCost() + diagonalCost, dataMap);
             }else if(((y==0)&& graph[x][y].data)) {
-                handleLeft(x, y, N, lineCost, diagonalCost, dataMap);
+                checkBottomRight(graph[x + 1][y + 1], N, graph[x + 1][y + 1].getMovementCost() + diagonalCost, dataMap);
+
+                checkBottom(graph[x][y + 1], N, graph[x][y + 1].getMovementCost() + lineCost, dataMap);
+
+                checkRight(graph[x + 1][y], N, graph[x + 1][y].getMovementCost() + lineCost, dataMap);
+
+                checkTopRight(graph[x - 1][y], N, graph[x - 1][y].getMovementCost() + lineCost, dataMap);
+
+                checkTop(graph[x - 1][y + 1], N, graph[x - 1][y + 1].getMovementCost() + diagonalCost, dataMap);
             }else{
-                if (validationIsPassed(graph[x - 1][y - 1])) {
-                    openList.add(graph[x - 1][y - 1]);
-                    dataMap.put(graph[x - 1][y - 1], graph[x - 1][y - 1].getMovementCost() + diagonalCost);
-                    StdDraw.setXscale(-1, N);
-                    StdDraw.setYscale(-1, N);
-                    StdDraw.setPenColor(StdDraw.GREEN);
-                    StdDraw.filledSquare(graph[x - 1][y - 1].getxCoordinate(), N - graph[x - 1][y - 1].getyCoordinate()-1, .5);
-                }
-                if (validationIsPassed(graph[x-1][y])) {
-                    openList.add(graph[x - 1][y]);
-                    dataMap.put(graph[x - 1][y], graph[x - 1][y].getMovementCost() + lineCost);
-                    StdDraw.setXscale(-1, N);
-                    StdDraw.setYscale(-1, N);
-                    StdDraw.setPenColor(StdDraw.GREEN);
-                    StdDraw.filledSquare(graph[x - 1][y].getxCoordinate(), N - graph[x - 1][y].getyCoordinate()-1, .5);
-                }
-                if (validationIsPassed(graph[x-1][y+1])) {
-                    openList.add(graph[x - 1][y + 1]);
-                    dataMap.put(graph[x - 1][y + 1], graph[x - 1][y + 1].getMovementCost() + diagonalCost);
-                    StdDraw.setXscale(-1, N);
-                    StdDraw.setYscale(-1, N);
-                    StdDraw.setPenColor(StdDraw.GREEN);
-                    StdDraw.filledSquare(graph[x - 1][y + 1].getxCoordinate(), N - graph[x - 1][y + 1].getyCoordinate()-1, .5);
-                }
-                if (validationIsPassed(graph[x][y+1])) {
-                    openList.add(graph[x][y + 1]);
-                    dataMap.put(graph[x][y + 1], graph[x][y + 1].getMovementCost() + lineCost);
-                    StdDraw.setXscale(-1, N);
-                    StdDraw.setYscale(-1, N);
-                    StdDraw.setPenColor(StdDraw.GREEN);
-                    StdDraw.filledSquare(graph[x][y + 1].getxCoordinate(), N - graph[x][y + 1].getyCoordinate()-1, .5);
-                }
-                if (validationIsPassed(graph[x][y-1])) {
-                    openList.add(graph[x][y - 1]);
-                    dataMap.put(graph[x][y - 1], graph[x][y - 1].getMovementCost() + lineCost);
-                    StdDraw.setXscale(-1, N);
-                    StdDraw.setYscale(-1, N);
-                    StdDraw.setPenColor(StdDraw.GREEN);
-                    StdDraw.filledSquare(graph[x][y - 1].getxCoordinate(), N - graph[x][y - 1].getyCoordinate()-1, .5);
-                }
-                if (validationIsPassed(graph[x+1][y-1])) {
-                    openList.add(graph[x + 1][y - 1]);
-                    dataMap.put(graph[x + 1][y - 1], graph[x + 1][y - 1].getMovementCost() + diagonalCost);
-                    StdDraw.setXscale(-1, N);
-                    StdDraw.setYscale(-1, N);
-                    StdDraw.setPenColor(StdDraw.GREEN);
-                    StdDraw.filledSquare(graph[x + 1][y - 1].getxCoordinate(), N - graph[x + 1][y - 1].getyCoordinate()-1, .5);
-                }
-                if (validationIsPassed(graph[x+1][y+1])) {
-                    openList.add(graph[x + 1][y + 1]);
-                    dataMap.put(graph[x + 1][y + 1], graph[x + 1][y + 1].getMovementCost() + lineCost);
-                    StdDraw.setXscale(-1, N);
-                    StdDraw.setYscale(-1, N);
-                    StdDraw.setPenColor(StdDraw.GREEN);
-                    StdDraw.filledSquare(graph[x + 1][y + 1].getxCoordinate(), N - graph[x + 1][y + 1].getyCoordinate()-1, .5);
-                }
-                if (validationIsPassed(graph[x+1][y])) {
-                    openList.add(graph[x + 1][y]);
-                    dataMap.put(graph[x + 1][y], graph[x + 1][y].getMovementCost() + diagonalCost);
-                    StdDraw.setXscale(-1, N);
-                    StdDraw.setYscale(-1, N);
-                    StdDraw.setPenColor(StdDraw.GREEN);
-                    StdDraw.filledSquare(graph[x + 1][y].getxCoordinate(), N - graph[x + 1][y].getyCoordinate()-1, .5);
-                }
+                checkTopLeft(graph[x - 1][y - 1], N, graph[x - 1][y - 1].getMovementCost() + diagonalCost, dataMap);
+                checkLeft(graph[x - 1][y], N, graph[x - 1][y].getMovementCost() + lineCost, dataMap);
+                checkBottomLeft(graph[x - 1][y + 1], N, graph[x - 1][y + 1].getMovementCost() + diagonalCost, dataMap);
+                checkBottom(graph[x][y + 1], N, graph[x][y + 1].getMovementCost() + lineCost, dataMap);
+                checkTop(graph[x][y - 1], N, graph[x][y - 1].getMovementCost() + lineCost, dataMap);
+                checkTopRight(graph[x + 1][y - 1], N, graph[x + 1][y - 1].getMovementCost() + diagonalCost, dataMap);
+                checkBottomRight(graph[x + 1][y + 1], N, graph[x + 1][y + 1].getMovementCost() + diagonalCost, dataMap);
+                checkRight(graph[x + 1][y], N, graph[x + 1][y].getMovementCost() + lineCost, dataMap);
             }
 
 
         }catch (ArrayIndexOutOfBoundsException e){
-
+            e.printStackTrace();
         }
         Iterator it = dataMap.entrySet().iterator();
         int minimumGValue = 1000;
@@ -271,67 +263,47 @@ public class PathFindingOnSquaredGrid {
         return minimumNode;
     }
 
-    private static void handleLeft(int x, int y, int N, int lineCost, int diagonalCost, Map<Node, Integer> dataMap) {
-        handleInitialNode(x, y, N, diagonalCost, dataMap);
-
-        openList.add(graph[x + 1][y - 1]);
-        dataMap.put(graph[x + 1][y - 1], graph[x + 1][y - 1].getMovementCost() + diagonalCost);
-        StdDraw.setXscale(-1, N);
-        StdDraw.setYscale(-1, N);
-        StdDraw.setPenColor(StdDraw.GREEN);
-        StdDraw.filledSquare(graph[x + 1][y - 1].getxCoordinate(), N - graph[x + 1][y - 1].getyCoordinate() - 1, .5);
-
-        openList.add(graph[x][y - 1]);
-        dataMap.put(graph[x][y - 1], graph[x][y - 1].getMovementCost() + lineCost);
-        StdDraw.setXscale(-1, N);
-        StdDraw.setYscale(-1, N);
-        StdDraw.setPenColor(StdDraw.GREEN);
-        StdDraw.filledSquare(graph[x][y - 1].getxCoordinate(), N - graph[x][y - 1].getyCoordinate() - 1, .5);
+    private static void checkRight(Node o, int N, int value, Map<Node, Integer> dataMap) {
+        checkNodesAroundCurrentNode(o, N, value, dataMap);
     }
 
-    private static void handleRight(int N, Map<Node, Integer> dataMap, Node e, int value, int x2, int y2, Node e2, int value2, int x3, int y3, Node e3, int value3, int x4, int y4, Node e4, int value4, int x5, int y5, Node e5, int value5, int x6, int y6) {
-        handleBottomLeftNode(N, dataMap, e, value, x2, y2, e2, value2, x3, y3, e3, value3, x4, y4);
-
-        openList.add(e4);
-        dataMap.put(e4, value4);
-        StdDraw.setXscale(-1, N);
-        StdDraw.setYscale(-1, N);
-        StdDraw.setPenColor(StdDraw.GREEN);
-        StdDraw.filledSquare(x5, y5, .5);
-
-        openList.add(e5);
-        dataMap.put(e5, value5);
-        StdDraw.setXscale(-1, N);
-        StdDraw.setYscale(-1, N);
-        StdDraw.setPenColor(StdDraw.GREEN);
-        StdDraw.filledSquare(x6, y6, .5);
+    private static void checkNodesAroundCurrentNode(Node o, int N, int value, Map<Node, Integer> dataMap) {
+        if (validationIsPassed(o)) {
+            openList.add(o);
+            dataMap.put(o, value);
+            StdDraw.setXscale(-1, N);
+            StdDraw.setYscale(-1, N);
+            StdDraw.setPenColor(StdDraw.GREEN);
+            StdDraw.filledSquare(o.getxCoordinate(), N - o.getyCoordinate()-1, .5);
+        }
     }
 
-    private static void handleBottomLeftNode(int N, Map<Node, Integer> dataMap, Node e, int value, int x2, int y2, Node e2, int value2, int x3, int y3, Node e3, int value3, int x4, int y4) {
-        openList.add(e);
-        dataMap.put(e, value);
-        StdDraw.setXscale(-1, N);
-        StdDraw.setYscale(-1, N);
-        StdDraw.setPenColor(StdDraw.GREEN);
-        StdDraw.filledSquare(x2, y2, .5);
-
-        openList.add(e2);
-        dataMap.put(e2, value2);
-        StdDraw.setXscale(-1, N);
-        StdDraw.setYscale(-1, N);
-        StdDraw.setPenColor(StdDraw.GREEN);
-        StdDraw.filledSquare(x3, y3, .5);
-
-        openList.add(e3);
-        dataMap.put(e3, value3);
-        StdDraw.setXscale(-1, N);
-        StdDraw.setYscale(-1, N);
-        StdDraw.setPenColor(StdDraw.GREEN);
-        StdDraw.filledSquare(x4, y4, .5);
+    private static void checkBottomRight(Node o, int N, int value, Map<Node, Integer> dataMap) {
+        checkNodesAroundCurrentNode(o, N, value, dataMap);
     }
 
-    private static void handleInitialNode(int x, int y, int N, int diagonalCost, Map<Node, Integer> dataMap) {
-        handleBottomLeftNode(N, dataMap, graph[x + 1][y + 1], graph[x + 1][y + 1].getMovementCost() + diagonalCost, graph[x + 1][y + 1].getxCoordinate(), N - graph[x + 1][y + 1].getyCoordinate()-1, graph[x][y + 1], graph[x][y + 1].getMovementCost() + diagonalCost, graph[x][y + 1].getxCoordinate(), N - graph[x][y + 1].getyCoordinate()-1, graph[x + 1][y], graph[x + 1][y].getMovementCost() + diagonalCost, graph[x + 1][y].getxCoordinate(), N - graph[x + 1][y].getyCoordinate()-1);
+    private static void checkTopRight(Node o, int N, int value, Map<Node, Integer> dataMap) {
+        checkNodesAroundCurrentNode(o, N, value, dataMap);
+    }
+
+    private static void checkTop(Node o, int N, int value, Map<Node, Integer> dataMap) {
+        checkNodesAroundCurrentNode(o, N, value, dataMap);
+    }
+
+    private static void checkBottom(Node o, int N, int value, Map<Node, Integer> dataMap) {
+        checkNodesAroundCurrentNode(o, N, value, dataMap);
+    }
+
+    private static void checkBottomLeft(Node o, int N, int value, Map<Node, Integer> dataMap) {
+        checkNodesAroundCurrentNode(o, N, value, dataMap);
+    }
+
+    private static void checkLeft(Node o, int N, int value, Map<Node, Integer> dataMap) {
+        checkNodesAroundCurrentNode(o, N, value, dataMap);
+    }
+
+    private static void checkTopLeft(Node o, int N, int value, Map<Node, Integer> dataMap) {
+        checkNodesAroundCurrentNode(o, N, value, dataMap);
     }
 
     private static boolean validationIsPassed(Node o) {
@@ -469,6 +441,5 @@ public class PathFindingOnSquaredGrid {
     }
 
 }
-
 
 
