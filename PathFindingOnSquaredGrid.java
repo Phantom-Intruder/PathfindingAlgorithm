@@ -150,6 +150,139 @@ public class PathFindingOnSquaredGrid {
         findNextNodeToMoveTo(nextNodeToGoTo.getyCoordinate(), nextNodeToGoTo.getxCoordinate(), N);
     }
 
+    private static void goToNextNodeEuclidean(Node nextNodeToGoTo, int N) {
+        findNextNodeToMoveToEuclidean(nextNodeToGoTo.getyCoordinate(), nextNodeToGoTo.getxCoordinate(), N);
+    }
+    public static void getEuclideanDistance(int x, int y, int y1, int x1, int N){
+        getMovementCost(y1, x1, N);
+        findNextNodeToMoveToEuclidean(x, y, N);
+    }
+
+    private static void findNextNodeToMoveToEuclidean(int x, int y, int N) {
+
+        Node nextNodeToGoTo = getEuclideanMovementCost(x, y, N);
+        if (nextNodeToGoTo == null){
+            return;
+        }
+        StdDraw.setXscale(-1, N);
+        StdDraw.setYscale(-1, N);
+        StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
+        StdDraw.filledSquare(nextNodeToGoTo.getxCoordinate(), N - nextNodeToGoTo.getyCoordinate()-1, .5);
+        nodesToGetToPath.add(nextNodeToGoTo);
+
+        goToNextNodeEuclidean(nextNodeToGoTo, N);
+    }
+
+    private static Node getEuclideanMovementCost(int x, int y, int N) {
+        Map<Node, Integer> dataMap = new HashMap<>();
+        Node minimumNode = null;
+        try {
+            closedList.add(graph[x][y]);
+            if (((x==0)&&(y==0)&& graph[x][y].data)){
+                checkBottomRight(graph[x + 1][y + 1], N, graph[x + 1][y + 1].getMovementCost(), dataMap);
+
+                checkBottom(graph[x][y + 1], N, graph[x][y + 1].getMovementCost(), dataMap);
+
+                checkRight(graph[x + 1][y], N, graph[x + 1][y].getMovementCost(), dataMap);
+            }else if (((y==0)&&(x==N-1)&& graph[x][y].data)){
+                checkBottom(graph[x][y + 1], N, graph[x][y + 1].getMovementCost(), dataMap);
+
+                checkLeft(graph[x - 1][y], N, graph[x - 1][y].getMovementCost(), dataMap);
+
+                checkBottomLeft(graph[x - 1][y + 1], N, graph[x - 1][y + 1].getMovementCost(), dataMap);
+            }else if (((y==N-1)&&(x==N-1)&& graph[x][y].data)){
+                checkTopLeft(graph[x - 1][y - 1], N, graph[x - 1][y - 1].getMovementCost(), dataMap);
+
+                checkTop(graph[x][y - 1], N, graph[x][y - 1].getMovementCost(), dataMap);
+
+                checkLeft(graph[x - 1][y], N, graph[x - 1][y].getMovementCost(), dataMap);
+            }else if (((y==N-1)&&(x==0)&& graph[x][y].data)){
+                checkTopRight(graph[x + 1][y - 1], N, graph[x + 1][y - 1].getMovementCost(), dataMap);
+
+                checkTop(graph[x][y - 1], N, graph[x][y - 1].getMovementCost(), dataMap);
+
+                checkRight(graph[x + 1][y], N, graph[x + 1][y].getMovementCost(), dataMap);
+            }else if (((y==N-1)&& graph[x][y].data)){
+                checkTop(graph[x][y - 1], N, graph[x][y - 1].getMovementCost(), dataMap);
+
+                checkTopRight(graph[x + 1][y - 1], N, graph[x + 1][y - 1].getMovementCost(), dataMap);
+
+                checkTopLeft(graph[x - 1][y - 1], N, graph[x - 1][y - 1].getMovementCost(), dataMap);
+
+                checkLeft(graph[x - 1][y], N, graph[x - 1][y].getMovementCost(), dataMap);
+
+                checkRight(graph[x + 1][y], N, graph[x + 1][y].getMovementCost(), dataMap);
+            }else if (((x==0)&& graph[x][y].data)){
+
+                checkTop(graph[x][y - 1], N, graph[x][y - 1].getMovementCost(), dataMap);
+
+                checkTopRight(graph[x + 1][y - 1], N, graph[x + 1][y - 1].getMovementCost(), dataMap);
+
+                checkBottomRight(graph[x + 1][y + 1], N, graph[x + 1][y + 1].getMovementCost(), dataMap);
+
+                checkRight(graph[x + 1][y], N, graph[x + 1][y].getMovementCost(), dataMap);
+
+                checkBottom(graph[x][y + 1], N, graph[x][y + 1].getMovementCost(), dataMap);
+            }else if (((x==N-1)&& graph[x][y].data)){
+                checkBottom(graph[x][y + 1], N, graph[x][y + 1].getMovementCost(), dataMap);
+
+                checkTop(graph[x][y - 1], N, graph[x][y - 1].getMovementCost(), dataMap);
+
+                checkTopLeft(graph[x - 1][y - 1], N, graph[x - 1][y - 1].getMovementCost(), dataMap);
+
+                checkLeft(graph[x - 1][y], N, graph[x - 1][y].getMovementCost(), dataMap);
+
+                checkBottomLeft(graph[x - 1][y + 1], N, graph[x - 1][y + 1].getMovementCost(), dataMap);
+            }else if(((y==0)&& graph[x][y].data)) {
+                checkBottomRight(graph[x + 1][y + 1], N, graph[x + 1][y + 1].getMovementCost(), dataMap);
+
+                checkBottom(graph[x][y + 1], N, graph[x][y + 1].getMovementCost(), dataMap);
+
+                checkRight(graph[x + 1][y], N, graph[x + 1][y].getMovementCost(), dataMap);
+
+                checkTopRight(graph[x - 1][y], N, graph[x - 1][y].getMovementCost(), dataMap);
+
+                checkTop(graph[x - 1][y + 1], N, graph[x - 1][y + 1].getMovementCost(), dataMap);
+            }else{
+                checkTopLeft(graph[x - 1][y - 1], N, graph[x - 1][y - 1].getMovementCost(), dataMap);
+                checkLeft(graph[x - 1][y], N, graph[x - 1][y].getMovementCost(), dataMap);
+                checkBottomLeft(graph[x - 1][y + 1], N, graph[x - 1][y + 1].getMovementCost(), dataMap);
+                checkBottom(graph[x][y + 1], N, graph[x][y + 1].getMovementCost(), dataMap);
+                checkTop(graph[x][y - 1], N, graph[x][y - 1].getMovementCost(), dataMap);
+                checkTopRight(graph[x + 1][y - 1], N, graph[x + 1][y - 1].getMovementCost(), dataMap);
+                checkBottomRight(graph[x + 1][y + 1], N, graph[x + 1][y + 1].getMovementCost(), dataMap);
+                checkRight(graph[x + 1][y], N, graph[x + 1][y].getMovementCost(), dataMap);
+            }
+
+
+        }catch (ArrayIndexOutOfBoundsException e){
+            e.printStackTrace();
+        }
+        Iterator it = dataMap.entrySet().iterator();
+        int minimumGValue = 1000;
+
+        while (it.hasNext()){
+            Map.Entry pair = (Map.Entry)it.next();
+            Node currentNode = (Node)pair.getKey();
+            if (currentNode == null)
+                continue;
+            if (currentNode.isFinalNode()){
+                System.out.println("Final node has been found "+ currentNode.getxCoordinate()+ ", "+ currentNode.getyCoordinate());
+
+                return null;
+            }
+            if (((int) pair.getValue()) < minimumGValue){
+                minimumGValue = (int) pair.getValue();
+                minimumNode = currentNode;
+            }
+            it.remove();
+        }
+        if (minimumNode != null) {
+            System.out.println(minimumGValue + "==" + minimumNode.nodeNumber);
+        }
+
+        return minimumNode;
+    }
     private static Node getGValue(int x, int y, int N) {
         int lineCost = 10;
         int diagonalCost = 14;
@@ -343,17 +476,16 @@ public class PathFindingOnSquaredGrid {
                 if (i > y1){
                     movementCost += awayFromY;
                 }
-                graph[i][j].setMovementCost(movementCost);
+                if (graph[i][j].data) {
+                    graph[i][j].setMovementCost(movementCost);
+                }else{
+                    graph[i][j].setMovementCost(1000);
+                }
                 System.out.print(graph[i][j].getMovementCost()+" ");
             }
             System.out.println();
             awayFromX=0;
         }
-    }
-
-    public static void getEuclideanDistance(int x, int y, int y1, int x1, int N){
-        getMovementCost(y1, x1, N);
-        findNextNodeToMoveTo(x, y, N);
     }
 
     public static void getChebyshevDistance(int x, int y, int x1, int y1){
@@ -381,7 +513,7 @@ public class PathFindingOnSquaredGrid {
         // The lower the second parameter, the more obstacles (black cells) are generated
 
         int N = 10;
-        randomlyGenMatrix = random(N, 1);
+        randomlyGenMatrix = random(N, 0.5);
 
         StdArrayIO.print(randomlyGenMatrix);
         show(randomlyGenMatrix, true);
@@ -416,7 +548,7 @@ public class PathFindingOnSquaredGrid {
 
 
         getShortestPathAlgorithm(N);
-        getManhattanDistance(Ai, Aj, Bi, Bj, N);
+        getEuclideanDistance(Ai, Aj, Bi, Bj, N);
         for (Node n : nodesToGetToPath) {
             if (n == null){
                 break;
@@ -441,5 +573,4 @@ public class PathFindingOnSquaredGrid {
     }
 
 }
-
 
