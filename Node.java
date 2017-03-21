@@ -6,6 +6,7 @@ public class Node {
     private int xCoordinate;
     private int yCoordinate;
     private boolean finalNode = false;
+    private Node parentNode;
     Node(boolean d, int nodeNum){
         data = d;
         nodeNumber = nodeNum;
@@ -42,5 +43,13 @@ public class Node {
 
     public void setFinalNode(boolean finalNode) {
         this.finalNode = finalNode;
+    }
+
+    public Node getParentNode() {
+        return parentNode;
+    }
+
+    public void setParentNode(Node parentNode) {
+        this.parentNode = parentNode;
     }
 }

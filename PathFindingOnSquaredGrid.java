@@ -15,9 +15,11 @@ public class PathFindingOnSquaredGrid {
     private static Node[][] graph;
     private static ArrayList<Node> nodesToGetToPath = new ArrayList<>();
     private static List<Node> closedList = new ArrayList<>();
-    private static ArrayList openList = new ArrayList();;
-    private static int finalIPosition;
-    private static int finalJPosition;
+    private static int numberOfLopps = 0;
+    private static List<Node> openList= new ArrayList<>();
+
+
+
     public static boolean[][] flow(boolean[][] open) {
         int N = open.length;
 
@@ -126,17 +128,234 @@ public class PathFindingOnSquaredGrid {
 
 
     //New code starts below
-    public static void getManhattanDistance(int x, int y, int y1, int x1, int N){
+    public static void getManhattanDistance(int x, int y, int x1, int y1, int N){
         getMovementCost(y1, x1, N);
-        findNextNodeToMoveTo(x, y, N);
+        searchTheNodes(x, y);
+        //searchAllNodes(x, y);
+        //findNextNodeToMoveTo(x, y, N);
+    }
+
+    private static void searchTheNodes(int x, int y) {
+        boolean flag = false;
+        openList.add(graph[x][y]);
+        int index = 0;
+        while (!flag||(index == openList.size())){
+            try {Node currentNode = openList.get(index);
+            if (closedList.contains(currentNode)||(!currentNode.data)){
+                index++;
+                continue;
+            }
+            StdDraw.setXscale(-1, numberOfLopps);
+            StdDraw.setYscale(-1, numberOfLopps);
+            StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
+            //StdDraw.filledSquare(currentNode.getxCoordinate(), numberOfLopps - currentNode.getyCoordinate()-1, .5);
+            closedList.add(currentNode);
+            x = currentNode.getxCoordinate();
+            y = currentNode.getyCoordinate();
+            index++;
+            if (((x==0)&&(y==0)&& graph[x][y].data)){
+                if (graph[x+1][y].isFinalNode()) flag=true;
+                else if (graph[x][y+1].isFinalNode()) flag=true;
+                else if(graph[x+1][y+1].isFinalNode()) flag=true;
+                else {
+                    openList.add(graph[x+1][y]);
+                    graph[x+1][y].setParentNode(graph[x][y]);
+                    openList.add(graph[x][y+1]);
+                    graph[x][y+1].setParentNode(graph[x][y]);
+                    openList.add(graph[x+1][y+1]);
+                    graph[x+1][y+1].setParentNode(graph[x][y]);
+                }
+                //checkBottomRight(graph[x + 1][y + 1], numberOfLopps, graph[x + 1][y + 1].getMovementCost(), dataMap);
+            }else if (((y==0)&&(x==numberOfLopps-1)&& graph[x][y].data)){
+                if (graph[x][y+1].isFinalNode()) flag=true;
+                else if (graph[x-1][y].isFinalNode()) flag=true;
+                else if(graph[x-1][y+1].isFinalNode()) flag=true;
+                else {
+                    openList.add(graph[x][y+1]);
+                    graph[x][y+1].setParentNode(graph[x][y]);
+                    openList.add(graph[x-1][y]);
+                    graph[x-1][y].setParentNode(graph[x][y]);
+                    openList.add(graph[x-1][y+1]);
+                    graph[x-1][y+1].setParentNode(graph[x][y]);
+                }
+                //checkBottom(graph[x][y + 1], numberOfLopps, graph[x][y + 1].getMovementCost(), dataMap);
+            }else if (((y==numberOfLopps-1)&&(x==numberOfLopps-1)&& graph[x][y].data)){
+                if (graph[x][y-1].isFinalNode()) flag=true;
+                else if (graph[x-1][y].isFinalNode()) flag=true;
+                else if(graph[x-1][y-1].isFinalNode()) flag=true;
+                else {
+                    openList.add(graph[x][y-1]);
+                    graph[x][y-1].setParentNode(graph[x][y]);
+                    openList.add(graph[x-1][y]);
+                    graph[x-1][y].setParentNode(graph[x][y]);
+                    openList.add(graph[x-1][y-1]);
+                    graph[x-1][y-1].setParentNode(graph[x][y]);
+                }
+                //checkLeft(graph[x - 1][y], numberOfLopps, graph[x - 1][y].getMovementCost(), dataMap);
+            }else if (((y==numberOfLopps-1)&&(x==0)&& graph[x][y].data)){
+                if (graph[x+1][y].isFinalNode()) flag=true;
+                else if (graph[x][y-1].isFinalNode()) flag=true;
+                else if(graph[x+1][y-1].isFinalNode()) flag=true;
+                else {
+                    openList.add(graph[x+1][y]);
+                    graph[x+1][y].setParentNode(graph[x][y]);
+                    openList.add(graph[x][y-1]);
+                    graph[x][y-1].setParentNode(graph[x][y]);
+                    openList.add(graph[x+1][y-1]);
+                    graph[x+1][y-1].setParentNode(graph[x][y]);
+                }
+                //checkRight(graph[x][y-1], numberOfLopps, graph[x + 1][y].getMovementCost(), dataMap);
+            }else if (((y==numberOfLopps-1)&& graph[x][y].data)){
+                if (graph[x+1][y].isFinalNode()) flag=true;
+                else if (graph[x][y-1].isFinalNode()) flag=true;
+                else if(graph[x+1][y-1].isFinalNode()) flag=true;
+                else if (graph[x-1][y-1].isFinalNode()) flag=true;
+                else if(graph[x-1][y].isFinalNode()) flag=true;
+                else {
+                    openList.add(graph[x + 1][y]);
+                    graph[x + 1][y].setParentNode(graph[x][y]);
+                    openList.add(graph[x][y - 1]);
+                    graph[x][y - 1].setParentNode(graph[x][y]);
+                    openList.add(graph[x + 1][y - 1]);
+                    graph[x + 1][y - 1].setParentNode(graph[x][y]);
+                    openList.add(graph[x - 1][y - 1]);
+                    graph[x - 1][y - 1].setParentNode(graph[x][y]);
+                    openList.add(graph[x - 1][y]);
+                    graph[x - 1][y].setParentNode(graph[x][y]);
+                }
+               // checkRight(graph[x - 1][y], numberOfLopps, graph[x + 1][y].getMovementCost(), dataMap);
+            }else if (((x==0)&& graph[x][y].data)){
+                if (graph[x+1][y].isFinalNode()) flag=true;
+                else if (graph[x][y-1].isFinalNode()) flag=true;
+                else if(graph[x+1][y-1].isFinalNode()) flag=true;
+                else if (graph[x][y+1].isFinalNode()) flag=true;
+                else if(graph[x+1][y+1].isFinalNode()) flag=true;else {
+                    openList.add(graph[x+1][y]);
+                    graph[x+1][y].setParentNode(graph[x][y]);
+                    openList.add(graph[x][y-1]);
+                    graph[x][y-1].setParentNode(graph[x][y]);
+                    openList.add(graph[x+1][y-1]);
+                    graph[x+1][y-1].setParentNode(graph[x][y]);
+                    openList.add(graph[x][y+1]);
+                    graph[x][y+1].setParentNode(graph[x][y]);
+                    openList.add(graph[x+1][y+1]);
+                    graph[x+1][y+1].setParentNode(graph[x][y]);
+                }
+               // checkBottom(graph[x][y - 1], numberOfLopps, graph[x][y + 1].getMovementCost(), dataMap);
+            }else if (((x==numberOfLopps-1)&& graph[x][y].data)){
+                if (graph[x][y+1].isFinalNode()) flag=true;
+                else if (graph[x][y-1].isFinalNode()) flag=true;
+                else if(graph[x-1][y+1].isFinalNode()) flag=true;
+                else if (graph[x-1][y-1].isFinalNode()) flag=true;
+                else if(graph[x-1][y].isFinalNode()) flag=true;
+                else {
+                    openList.add(graph[x][y+1]);
+                    graph[x][y+1].setParentNode(graph[x][y]);
+                    openList.add(graph[x][y-1]);
+                    graph[x][y-1].setParentNode(graph[x][y]);
+                    openList.add(graph[x-1][y+1]);
+                    graph[x-1][y+1].setParentNode(graph[x][y]);
+                    openList.add(graph[x-1][y-1]);
+                    graph[x-1][y-1].setParentNode(graph[x][y]);
+                    openList.add(graph[x-1][y]);
+                    graph[x-1][y].setParentNode(graph[x][y]);
+                }
+               // checkBottomLeft(graph[x - 1][y + 1], numberOfLopps, graph[x - 1][y + 1].getMovementCost(), dataMap);
+            }else if(((y==0)&& graph[x][y].data)) {
+                if (graph[x+1][y].isFinalNode()) flag=true;
+                else if (graph[x-1][y].isFinalNode()) flag=true;
+                else if(graph[x-1][y+1].isFinalNode()) flag=true;
+                else if (graph[x][y+1].isFinalNode()) flag=true;
+                else if(graph[x+1][y+1].isFinalNode()) flag=true;
+                else {
+                    openList.add(graph[x+1][y]);
+                    graph[x+1][y].setParentNode(graph[x][y]);
+                    openList.add(graph[x-1][y]);
+                    graph[x-1][y].setParentNode(graph[x][y]);
+                    openList.add(graph[x-1][y+1]);
+                    graph[x-1][y+1].setParentNode(graph[x][y]);
+                    openList.add(graph[x][y+1]);
+                    graph[x][y+1].setParentNode(graph[x][y]);
+                    openList.add(graph[x+1][y+1]);
+                    graph[x+1][y+1].setParentNode(graph[x][y]);
+                }
+                //checkTop(graph[x - 1][y + 1], numberOfLopps, graph[x - 1][y + 1].getMovementCost(), dataMap);
+            }else{
+                if (graph[x+1][y].isFinalNode()) flag=true;
+                else if (graph[x-1][y].isFinalNode()) flag=true;
+                else if(graph[x-1][y+1].isFinalNode()) flag=true;
+                else if (graph[x][y+1].isFinalNode()) flag=true;
+                else if(graph[x+1][y+1].isFinalNode()) flag=true;
+                else if(graph[x-1][y-1].isFinalNode()) flag=true;
+                else if (graph[x][y-1].isFinalNode()) flag=true;
+                else if(graph[x+1][y-1].isFinalNode()) flag=true;else {
+                    //logic
+                    openList.add(graph[x+1][y]);
+                    graph[x+1][y].setParentNode(graph[x][y]);
+                    openList.add(graph[x-1][y]);
+                    graph[x-1][y].setParentNode(graph[x][y]);
+                    openList.add(graph[x-1][y+1]);
+                    graph[x-1][y+1].setParentNode(graph[x][y]);
+                    openList.add(graph[x][y+1]);
+                    graph[x][y+1].setParentNode(graph[x][y]);
+                    openList.add(graph[x+1][y+1]);
+                    graph[x+1][y+1].setParentNode(graph[x][y]);
+
+                    openList.add(graph[x-1][y-1]);
+                    graph[x-1][y-1].setParentNode(graph[x][y]);
+                    openList.add(graph[x][y-1]);
+                    graph[x][y-1].setParentNode(graph[x][y]);
+                    openList.add(graph[x+1][y-1]);
+                    graph[x+1][y-1].setParentNode(graph[x][y]);
+                }
+               // checkRight(graph[x + 1][y], numberOfLopps, graph[x + 1][y].getMovementCost(), dataMap);
+            }
+        }catch (IndexOutOfBoundsException e){
+                StdOut.print("No path found");
+                return;
+            }
+        }
+        System.out.println("dasdsa");
+    }
+    private static void searchAllNodes(int x, int y) {
+        Map<Node, Integer> dataMap = new HashMap<>();
+        if (graph[x][y].isFinalNode()){
+            System.out.println("Final node has been found "+ graph[x][y].getxCoordinate()+ ", "+ graph[x][y].getyCoordinate());
+            return;
+        }
+        try {
+            closedList.add(graph[x][y]);
+            if (((x==0)&&(y==0)&& graph[x][y].data)){
+                checkBottomRight(graph[x + 1][y + 1], numberOfLopps, graph[x + 1][y + 1].getMovementCost(), dataMap);
+            }else if (((y==0)&&(x==numberOfLopps-1)&& graph[x][y].data)){
+                checkBottom(graph[x][y + 1], numberOfLopps, graph[x][y + 1].getMovementCost(), dataMap);
+            }else if (((y==numberOfLopps-1)&&(x==numberOfLopps-1)&& graph[x][y].data)){
+                checkLeft(graph[x - 1][y], numberOfLopps, graph[x - 1][y].getMovementCost(), dataMap);
+            }else if (((y==numberOfLopps-1)&&(x==0)&& graph[x][y].data)){
+                checkRight(graph[x][y-1], numberOfLopps, graph[x + 1][y].getMovementCost(), dataMap);
+            }else if (((y==numberOfLopps-1)&& graph[x][y].data)){
+                checkRight(graph[x - 1][y], numberOfLopps, graph[x + 1][y].getMovementCost(), dataMap);
+            }else if (((x==0)&& graph[x][y].data)){
+                checkBottom(graph[x][y - 1], numberOfLopps, graph[x][y + 1].getMovementCost(), dataMap);
+            }else if (((x==numberOfLopps-1)&& graph[x][y].data)){
+                checkBottomLeft(graph[x - 1][y + 1], numberOfLopps, graph[x - 1][y + 1].getMovementCost(), dataMap);
+            }else if(((y==0)&& graph[x][y].data)) {
+                checkTop(graph[x - 1][y + 1], numberOfLopps, graph[x - 1][y + 1].getMovementCost(), dataMap);
+            }else{
+                checkRight(graph[x + 1][y], numberOfLopps, graph[x + 1][y].getMovementCost(), dataMap);
+            }
+        }catch (ArrayIndexOutOfBoundsException e){
+            e.printStackTrace();
+        }
     }
 
     private static void findNextNodeToMoveTo(int x, int y, int N) {
-
+        numberOfLopps = N;
         Node nextNodeToGoTo = getGValue(x, y, N);
         if (nextNodeToGoTo == null){
             return;
         }
+
         StdDraw.setXscale(-1, N);
         StdDraw.setYscale(-1, N);
         StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
@@ -146,8 +365,26 @@ public class PathFindingOnSquaredGrid {
         goToNextNode(nextNodeToGoTo, N);
     }
 
+    private static void checkNextNodeToMoveTo(Node n1) {
+
+        if (n1 == null){
+            return;
+        }
+        StdDraw.setXscale(-1, numberOfLopps);
+        StdDraw.setYscale(-1, numberOfLopps);
+        StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
+        StdDraw.filledSquare(n1.getxCoordinate(), numberOfLopps - n1.getyCoordinate()-1, .5);
+        nodesToGetToPath.add(n1);
+
+        goToNextNodeCheck(n1, numberOfLopps);
+    }
+
     private static void goToNextNode(Node nextNodeToGoTo, int N) {
         findNextNodeToMoveTo(nextNodeToGoTo.getyCoordinate(), nextNodeToGoTo.getxCoordinate(), N);
+    }
+
+    private static void goToNextNodeCheck(Node nextNodeToGoTo, int N) {
+        searchAllNodes(nextNodeToGoTo.getyCoordinate(), nextNodeToGoTo.getxCoordinate());
     }
 
     private static void goToNextNodeEuclidean(Node nextNodeToGoTo, int N) {
@@ -402,12 +639,12 @@ public class PathFindingOnSquaredGrid {
 
     private static void checkNodesAroundCurrentNode(Node o, int N, int value, Map<Node, Integer> dataMap) {
         if (validationIsPassed(o)) {
-            openList.add(o);
             dataMap.put(o, value);
             StdDraw.setXscale(-1, N);
             StdDraw.setYscale(-1, N);
             StdDraw.setPenColor(StdDraw.GREEN);
             StdDraw.filledSquare(o.getxCoordinate(), N - o.getyCoordinate()-1, .5);
+            checkNextNodeToMoveTo(o);
         }
     }
 
@@ -454,7 +691,8 @@ public class PathFindingOnSquaredGrid {
         int awayFromX=0;
         int awayFromY=0;
         int anchorPoint=0;
-        graph[y1][x1].setFinalNode(true);
+        graph[x1][y1].setFinalNode(true);
+
         //finalIPosition = y1;
 
         for (int i=0; i < N; i++){
@@ -498,8 +736,8 @@ public class PathFindingOnSquaredGrid {
         for (int i=0; i < N; i++){
             for (int j=0; j < N; j++){
                 graph[i][j] = new Node(randomlyGenMatrix[i][j], k);
-                graph[i][j].setxCoordinate(j);
-                graph[i][j].setyCoordinate(i);
+                graph[i][j].setxCoordinate(i);
+                graph[i][j].setyCoordinate(j);
                 k++;
             }
         }
@@ -512,8 +750,9 @@ public class PathFindingOnSquaredGrid {
         // The following will generate a 10x10 squared grid with relatively few obstacles in it
         // The lower the second parameter, the more obstacles (black cells) are generated
 
-        int N = 10;
-        randomlyGenMatrix = random(N, 0.5);
+        int N = 100;
+        numberOfLopps = N;
+        randomlyGenMatrix = random(N, 0.8);
 
         StdArrayIO.print(randomlyGenMatrix);
         show(randomlyGenMatrix, true);
@@ -548,14 +787,15 @@ public class PathFindingOnSquaredGrid {
 
 
         getShortestPathAlgorithm(N);
-        getEuclideanDistance(Ai, Aj, Bi, Bj, N);
-        for (Node n : nodesToGetToPath) {
+        //getEuclideanDistance(Ai, Aj, Bi, Bj, N);
+        getManhattanDistance(Aj, Ai, Bj, Bi, N);
+        for (Node n : closedList) {
             if (n == null){
                 break;
             }
             StdDraw.setXscale(-1, N);
             StdDraw.setYscale(-1, N);
-            StdDraw.setPenColor(StdDraw.RED);
+            StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
             StdDraw.filledSquare(n.getxCoordinate(), N - n.getyCoordinate()-1, .5);
             StdDraw.setPenColor(StdDraw.GRAY);
             //StdDraw.line(Ai, Aj, N-n.getxCoordinate(), n.getyCoordinate()-1);
@@ -570,6 +810,8 @@ public class PathFindingOnSquaredGrid {
         // System.out.println("Coordinates for B: [" + Bi + "," + Bj + "]");
 
         show(randomlyGenMatrix, true, Ai, Aj, Bi, Bj);
+
+
     }
 
 }
