@@ -6,7 +6,8 @@ public class Node {
     private int xCoordinate;
     private int yCoordinate;
     private boolean finalNode = false;
-    private Node parentNode;
+    private Node parentNode = null;
+    private int previousNodeCost = 0;
     Node(boolean d, int nodeNum){
         data = d;
         nodeNumber = nodeNum;
@@ -51,5 +52,13 @@ public class Node {
 
     public void setParentNode(Node parentNode) {
         this.parentNode = parentNode;
+    }
+
+    public int getPreviousNodeCost() {
+        return previousNodeCost;
+    }
+
+    public void setPreviousNodeCost(int previousNodeCost) {
+        this.previousNodeCost = previousNodeCost;
     }
 }
