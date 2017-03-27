@@ -411,9 +411,7 @@ public class PathFindingOnSquaredGrid {
                 }else{
                     graph[i][j].setMovementCost(1000);
                 }
-                System.out.print(graph[i][j].getMovementCost()+" ");
             }
-            System.out.println();
             awayFromX=0;
         }
     }
@@ -443,6 +441,7 @@ public class PathFindingOnSquaredGrid {
         randomlyGenMatrix = random(N, 0.8);
 
         StdArrayIO.print(randomlyGenMatrix);
+        show(randomlyGenMatrix, true);
         show(randomlyGenMatrix, true);
 
         System.out.println();
@@ -494,8 +493,6 @@ public class PathFindingOnSquaredGrid {
         StdOut.println("Manhattan distance: " + manhattenDistance);
         StdOut.println("Euclidean distance: " + euclideanDistance);
 
-        // System.out.println("Coordinates for A: [" + Ai + "," + Aj + "]");
-        // System.out.println("Coordinates for B: [" + Bi + "," + Bj + "]");
 
         show(randomlyGenMatrix, true, Ai, Aj, Bi, Bj);
     }
