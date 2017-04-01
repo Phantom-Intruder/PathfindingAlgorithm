@@ -38,7 +38,6 @@ public class Node {
     }
 
     public boolean isFinalNode() {
-        System.out.println("Final node " + finalNode);
         return finalNode;
     }
 

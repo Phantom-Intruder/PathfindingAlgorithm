@@ -22,6 +22,9 @@ public class PathFindingOnSquaredGrid {
     private static boolean isManhatten = false;
     private static boolean isChebyshev = false;
     private static boolean isEuclidean = false;
+    private static int numberOfDiagonalMoves = 0;
+    private static int numberOfStraightMoves = 0;
+
 
     public static boolean[][] flow(boolean[][] open) {
         int N = open.length;
@@ -138,9 +141,25 @@ public class PathFindingOnSquaredGrid {
     }
 
     private static void getChebyshevDistance(int x, int y, int x1, int y1, int N) {
-        getMovementCost(y1, x1, N);
+        for (int i=0; i < numberOfLopps; i++){
+            for (int j = 0; j < numberOfLopps; j++){
+                graph[i][j].setParentNode(null);
+            }
+        }
         isChebyshev = true;
+        isManhatten = false;
+        openList = new ArrayList<>();
+        closedList = new ArrayList<>();
         searchTheNodes(x, y);
+    }
+
+    private static void getEuclideanDistance(int x, int y, int x1, int y1, int N) {
+         StdDraw.setXscale(-1, numberOfLopps);
+         StdDraw.setYscale(-1, numberOfLopps); 
+         StdDraw.setPenColor(StdDraw.BLUE);
+         StdDraw.line(y1, numberOfLopps- x1 - 1, y, numberOfLopps - x - 1);
+
+        
     }
 
     private static void searchTheNodes(int x, int y) {
@@ -159,177 +178,18 @@ public class PathFindingOnSquaredGrid {
                 }
                 StdDraw.setXscale(-1, numberOfLopps);
                 StdDraw.setYscale(-1, numberOfLopps);
-                StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
-                StdDraw.filledSquare(currentNode.getyCoordinate(), numberOfLopps - currentNode.getxCoordinate()-1, .5);
+                if (isManhatten) {
+                    StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
+                    StdDraw.filledSquare(currentNode.getyCoordinate(), numberOfLopps - currentNode.getxCoordinate() - 1, .5);
+                }
                 closedList.add(currentNode);
                 x = currentNode.getxCoordinate();
                 y = currentNode.getyCoordinate();
                 index++;
-                if (((x==0)&&(y==0)&& graph[x][y].data)){
-                    if (graph[x+1][y].isFinalNode()) flag=true;
-                    else if (graph[x][y+1].isFinalNode()) flag=true;
-                    else if(graph[x+1][y+1].isFinalNode()) flag=true;
-                    else {
-                        openList.add(graph[x+1][y]);
-                        openList.add(graph[x+1][y+1]);
-                        openList.add(graph[x][y+1]);
-
-                        graph[x+1][y] = isOnClosedList(graph[x+1][y], graph[x][y]);
-                        graph[x+1][y+1] = isOnClosedList(graph[x+1][y+1], graph[x][y]);
-                        graph[x][y+1] = isOnClosedList(graph[x][y+1], graph[x][y]);
-                    }
-                    //checkBottomRight(graph[x + 1][y + 1], numberOfLopps, graph[x + 1][y + 1].getMovementCost(), dataMap);
-                }else if (((y==0)&&(x==numberOfLopps-1)&& graph[x][y].data)){
-                    if (graph[x][y+1].isFinalNode()) flag=true;
-                    else if (graph[x-1][y].isFinalNode()) flag=true;
-                    else if(graph[x-1][y+1].isFinalNode()) flag=true;
-                    else {
-                        openList.add(graph[x][y+1]);
-                        openList.add(graph[x-1][y]);
-                        openList.add(graph[x-1][y+1]);
-
-                        graph[x][y+1] = isOnClosedList(graph[x][y+1], graph[x][y]);
-                        graph[x-1][y] = isOnClosedList(graph[x-1][y], graph[x][y]);
-                        graph[x-1][y+1] = isOnClosedList(graph[x-1][y+1], graph[x][y]);
-                    }
-                    //checkBottom(graph[x][y + 1], numberOfLopps, graph[x][y + 1].getMovementCost(), dataMap);
-                }else if (((y==numberOfLopps-1)&&(x==numberOfLopps-1)&& graph[x][y].data)){
-                    if (graph[x][y-1].isFinalNode()) flag=true;
-                    else if (graph[x-1][y].isFinalNode()) flag=true;
-                    else if(graph[x-1][y-1].isFinalNode()) flag=true;
-                    else {
-                        openList.add(graph[x][y-1]);
-                        openList.add(graph[x-1][y]);
-                        openList.add(graph[x-1][y-1]);
-
-                        graph[x][y-1] = isOnClosedList(graph[x][y-1], graph[x][y]);
-                        graph[x-1][y] = isOnClosedList(graph[x-1][y], graph[x][y]);
-                        graph[x-1][y-1] = isOnClosedList(graph[x-1][y-1], graph[x][y]);
-                    }
-                    //checkLeft(graph[x - 1][y], numberOfLopps, graph[x - 1][y].getMovementCost(), dataMap);
-                }else if (((y==numberOfLopps-1)&&(x==0)&& graph[x][y].data)){
-                    if (graph[x+1][y].isFinalNode()) flag=true;
-                    else if (graph[x][y-1].isFinalNode()) flag=true;
-                    else if(graph[x+1][y-1].isFinalNode()) flag=true;
-                    else {
-                        openList.add(graph[x+1][y]);
-                        openList.add(graph[x][y-1]);
-                        openList.add(graph[x+1][y-1]);
-
-                        graph[x+1][y] = isOnClosedList(graph[x+1][y], graph[x][y]);
-                        graph[x][y-1] = isOnClosedList(graph[x][y-1], graph[x][y]);
-                        graph[x+1][y-1] = isOnClosedList(graph[x+1][y-1], graph[x][y]);
-                    }
-                    //checkRight(graph[x][y-1], numberOfLopps, graph[x + 1][y].getMovementCost(), dataMap);
-                }else if (((y==numberOfLopps-1)&& graph[x][y].data)){
-                    if (graph[x+1][y].isFinalNode()) flag=true;
-                    else if (graph[x][y-1].isFinalNode()) flag=true;
-                    else if(graph[x+1][y-1].isFinalNode()) flag=true;
-                    else if (graph[x-1][y-1].isFinalNode()) flag=true;
-                    else if(graph[x-1][y].isFinalNode()) flag=true;
-                    else {
-                        openList.add(graph[x + 1][y]);
-                        openList.add(graph[x][y - 1]);
-                        openList.add(graph[x + 1][y - 1]);
-                        openList.add(graph[x - 1][y - 1]);
-                        openList.add(graph[x - 1][y]);
-
-                        graph[x+1][y] = isOnClosedList(graph[x+1][y], graph[x][y]);
-                        graph[x][y - 1] = isOnClosedList(graph[x][y-1], graph[x][y]);
-                        graph[x + 1][y - 1] = isOnClosedList(graph[x+1][y-1], graph[x][y]);
-                        graph[x - 1][y - 1] = isOnClosedList(graph[x-1][y-1], graph[x][y]);
-                        graph[x - 1][y] = isOnClosedList(graph[x-1][y], graph[x][y]);
-                    }
-                    // checkRight(graph[x - 1][y], numberOfLopps, graph[x + 1][y].getMovementCost(), dataMap);
-                }else if (((x==0)&& graph[x][y].data)){
-                    if (graph[x+1][y].isFinalNode()) flag=true;
-                    else if (graph[x][y-1].isFinalNode()) flag=true;
-                    else if(graph[x+1][y-1].isFinalNode()) flag=true;
-                    else if (graph[x][y+1].isFinalNode()) flag=true;
-                    else if(graph[x+1][y+1].isFinalNode()) flag=true;else {
-                        openList.add(graph[x+1][y]);
-                        openList.add(graph[x][y-1]);
-                        openList.add(graph[x+1][y-1]);
-                        openList.add(graph[x][y+1]);
-                        openList.add(graph[x+1][y+1]);
-
-                        graph[x+1][y] = isOnClosedList(graph[x+1][y], graph[x][y]);
-                        graph[x][y-1] = isOnClosedList(graph[x][y-1], graph[x][y]);
-                        graph[x+1][y-1] = isOnClosedList(graph[x+1][y-1], graph[x][y]);
-                        graph[x][y+1] = isOnClosedList(graph[x][y+1], graph[x][y]);
-                        graph[x+1][y+1] = isOnClosedList(graph[x+1][y+1], graph[x][y]);
-                        graph[x+1][y] = isOnClosedList(graph[x+1][y], graph[x][y]);
-                    }
-                    // checkBottom(graph[x][y - 1], numberOfLopps, graph[x][y + 1].getMovementCost(), dataMap);
-                }else if (((x==numberOfLopps-1)&& graph[x][y].data)){
-                    if (graph[x][y+1].isFinalNode()) flag=true;
-                    else if (graph[x][y-1].isFinalNode()) flag=true;
-                    else if(graph[x-1][y+1].isFinalNode()) flag=true;
-                    else if (graph[x-1][y-1].isFinalNode()) flag=true;
-                    else if(graph[x-1][y].isFinalNode()) flag=true;
-                    else {
-                        openList.add(graph[x][y+1]);
-                        openList.add(graph[x][y-1]);
-                        openList.add(graph[x-1][y+1]);
-                        openList.add(graph[x-1][y-1]);
-                        openList.add(graph[x-1][y]);
-
-                        graph[x][y+1] = isOnClosedList(graph[x][y+1], graph[x][y]);
-                        graph[x][y-1] = isOnClosedList(graph[x][y-1], graph[x][y]);
-                        graph[x-1][y+1] = isOnClosedList(graph[x-1][y+1], graph[x][y]);
-                        graph[x-1][y-1] = isOnClosedList(graph[x-1][y-1], graph[x][y]);
-                        graph[x-1][y] = isOnClosedList(graph[x-1][y], graph[x][y]);
-                    }
-                    // checkBottomLeft(graph[x - 1][y + 1], numberOfLopps, graph[x - 1][y + 1].getMovementCost(), dataMap);
-                }else if(((y==0)&& graph[x][y].data)) {
-                    if (graph[x+1][y].isFinalNode()) flag=true;
-                    else if (graph[x-1][y].isFinalNode()) flag=true;
-                    else if(graph[x-1][y+1].isFinalNode()) flag=true;
-                    else if (graph[x][y+1].isFinalNode()) flag=true;
-                    else if(graph[x+1][y+1].isFinalNode()) flag=true;
-                    else {
-                        openList.add(graph[x+1][y]);
-                        openList.add(graph[x-1][y]);
-                        openList.add(graph[x-1][y+1]);
-                        openList.add(graph[x][y+1]);
-                        openList.add(graph[x+1][y+1]);
-
-                        graph[x-1][y] = isOnClosedList(graph[x-1][y], graph[x][y]);
-                        graph[x-1][y+1] = isOnClosedList(graph[x-1][y+1], graph[x][y]);
-                        graph[x][y+1] = isOnClosedList(graph[x][y+1], graph[x][y]);
-                        graph[x+1][y+1] = isOnClosedList(graph[x+1][y+1], graph[x][y]);
-                        graph[x+1][y] = isOnClosedList(graph[x+1][y], graph[x][y]);
-                    }
-                    //checkTop(graph[x - 1][y + 1], numberOfLopps, graph[x - 1][y + 1].getMovementCost(), dataMap);
-                }else{
-                    if (graph[x+1][y].isFinalNode()) flag=true;
-                    else if (graph[x-1][y].isFinalNode()) flag=true;
-                    else if(graph[x-1][y+1].isFinalNode()) flag=true;
-                    else if (graph[x][y+1].isFinalNode()) flag=true;
-                    else if(graph[x+1][y+1].isFinalNode()) flag=true;
-                    else if(graph[x-1][y-1].isFinalNode()) flag=true;
-                    else if (graph[x][y-1].isFinalNode()) flag=true;
-                    else if(graph[x+1][y-1].isFinalNode()) flag=true;else {
-                        //logic
-                        openList.add(graph[x+1][y]);
-                        openList.add(graph[x-1][y]);
-                        openList.add(graph[x-1][y+1]);
-                        openList.add(graph[x][y+1]);
-                        openList.add(graph[x+1][y+1]);
-                        openList.add(graph[x-1][y-1]);
-                        openList.add(graph[x][y-1]);
-                        openList.add(graph[x+1][y-1]);
-
-                        graph[x+1][y] = isOnClosedList(graph[x+1][y], graph[x][y]);
-                        graph[x-1][y] = isOnClosedList(graph[x-1][y], graph[x][y]);
-                        graph[x-1][y+1] = isOnClosedList(graph[x-1][y+1], graph[x][y]);
-                        graph[x][y+1] = isOnClosedList(graph[x][y+1], graph[x][y]);
-                        graph[x+1][y+1] = isOnClosedList(graph[x+1][y+1], graph[x][y]);
-                        graph[x-1][y-1] = isOnClosedList(graph[x-1][y-1], graph[x][y]);
-                        graph[x][y-1] = isOnClosedList(graph[x][y-1], graph[x][y]);
-                        graph[x+1][y-1] = isOnClosedList(graph[x+1][y-1], graph[x][y]);
-                    }
-                }
+                if (isChebyshev)
+                    flag = checkNodes(x, y, flag);
+                else
+                    flag = checkNodesManhattan(x, y, flag);
                 currentNode = graph[x][y];
             }catch (IndexOutOfBoundsException e){
                 StdOut.print("No path found");
@@ -337,12 +197,317 @@ public class PathFindingOnSquaredGrid {
             }
         }
         while (currentNode.getParentNode() != null){
+            if ((currentNode.getxCoordinate() != currentNode.getParentNode().getxCoordinate())&&(currentNode.getyCoordinate() != currentNode.getParentNode().getyCoordinate())){
+                numberOfDiagonalMoves++;
+            }else{
+                numberOfStraightMoves++;
+            }
             StdDraw.setXscale(-1, numberOfLopps);
             StdDraw.setYscale(-1, numberOfLopps);
-            StdDraw.setPenColor(StdDraw.RED);
-            StdDraw.filledSquare(currentNode.getyCoordinate(), numberOfLopps - currentNode.getxCoordinate()-1, .5);
+            //StdDraw.filledSquare(currentNode.getyCoordinate(), numberOfLopps - currentNode.getxCoordinate()-1, .5);
+            if (isChebyshev)
+                StdDraw.setPenColor(StdDraw.RED);
+            else if (isManhatten)
+                StdDraw.setPenColor(StdDraw.YELLOW);
+           
+           StdDraw.line(currentNode.getParentNode().getyCoordinate(), numberOfLopps- currentNode.getParentNode().getxCoordinate() - 1, currentNode.getyCoordinate(), numberOfLopps - currentNode.getxCoordinate() - 1);
+
             currentNode = currentNode.getParentNode();
         }
+    }
+
+    private static boolean checkNodes(int x, int y, boolean flag) {
+        if (((x==0)&&(y==0)&& graph[x][y].data)){
+            if (graph[x+1][y].isFinalNode()) flag=true;
+            else if (graph[x][y+1].isFinalNode()) flag=true;
+            else if(graph[x+1][y+1].isFinalNode()) flag=true;
+            else {
+                openList.add(graph[x+1][y]);
+                openList.add(graph[x+1][y+1]);
+                openList.add(graph[x][y+1]);
+                
+                graph[x+1][y] = isOnClosedList(graph[x+1][y], graph[x][y]);
+                graph[x+1][y+1] = isOnClosedList(graph[x+1][y+1], graph[x][y]);
+                graph[x][y+1] = isOnClosedList(graph[x][y+1], graph[x][y]);
+            }
+            //checkBottomRight(graph[x + 1][y + 1], numberOfLopps, graph[x + 1][y + 1].getMovementCost(), dataMap);
+        }else if (((y==0)&&(x==numberOfLopps-1)&& graph[x][y].data)){
+            if (graph[x][y+1].isFinalNode()) flag=true;
+            else if (graph[x-1][y].isFinalNode()) flag=true;
+            else if(graph[x-1][y+1].isFinalNode()) flag=true;
+            else {
+                openList.add(graph[x][y+1]);
+                openList.add(graph[x-1][y]);
+                openList.add(graph[x-1][y+1]);
+                
+                graph[x][y+1] = isOnClosedList(graph[x][y+1], graph[x][y]);
+                graph[x-1][y] = isOnClosedList(graph[x-1][y], graph[x][y]);
+                graph[x-1][y+1] = isOnClosedList(graph[x-1][y+1], graph[x][y]);
+            }
+            //checkBottom(graph[x][y + 1], numberOfLopps, graph[x][y + 1].getMovementCost(), dataMap);
+        }else if (((y==numberOfLopps-1)&&(x==numberOfLopps-1)&& graph[x][y].data)){
+            if (graph[x][y-1].isFinalNode()) flag=true;
+            else if (graph[x-1][y].isFinalNode()) flag=true;
+            else if(graph[x-1][y-1].isFinalNode()) flag=true;
+            else {
+                openList.add(graph[x][y-1]);
+                openList.add(graph[x-1][y]);
+                openList.add(graph[x-1][y-1]);
+                
+                graph[x][y-1] = isOnClosedList(graph[x][y-1], graph[x][y]);
+                graph[x-1][y] = isOnClosedList(graph[x-1][y], graph[x][y]);
+                graph[x-1][y-1] = isOnClosedList(graph[x-1][y-1], graph[x][y]);
+            }
+            //checkLeft(graph[x - 1][y], numberOfLopps, graph[x - 1][y].getMovementCost(), dataMap);
+        }else if (((y==numberOfLopps-1)&&(x==0)&& graph[x][y].data)){
+            if (graph[x+1][y].isFinalNode()) flag=true;
+            else if (graph[x][y-1].isFinalNode()) flag=true;
+            else if(graph[x+1][y-1].isFinalNode()) flag=true;
+            else {
+                openList.add(graph[x+1][y]);
+                openList.add(graph[x][y-1]);
+                openList.add(graph[x+1][y-1]);
+                
+                graph[x+1][y] = isOnClosedList(graph[x+1][y], graph[x][y]);
+                graph[x][y-1] = isOnClosedList(graph[x][y-1], graph[x][y]);
+                graph[x+1][y-1] = isOnClosedList(graph[x+1][y-1], graph[x][y]);
+            }
+            //checkRight(graph[x][y-1], numberOfLopps, graph[x + 1][y].getMovementCost(), dataMap);
+        }else if (((y==numberOfLopps-1)&& graph[x][y].data)){
+            if (graph[x+1][y].isFinalNode()) flag=true;
+            else if (graph[x][y-1].isFinalNode()) flag=true;
+            else if(graph[x+1][y-1].isFinalNode()) flag=true;
+            else if (graph[x-1][y-1].isFinalNode()) flag=true;
+            else if(graph[x-1][y].isFinalNode()) flag=true;
+            else {
+                openList.add(graph[x + 1][y]);
+                openList.add(graph[x][y - 1]);
+                openList.add(graph[x + 1][y - 1]);
+                openList.add(graph[x - 1][y - 1]);
+                openList.add(graph[x - 1][y]);
+                
+                graph[x+1][y] = isOnClosedList(graph[x+1][y], graph[x][y]);
+                graph[x][y - 1] = isOnClosedList(graph[x][y-1], graph[x][y]);
+                graph[x + 1][y - 1] = isOnClosedList(graph[x+1][y-1], graph[x][y]);
+                graph[x - 1][y - 1] = isOnClosedList(graph[x-1][y-1], graph[x][y]);
+                graph[x - 1][y] = isOnClosedList(graph[x-1][y], graph[x][y]);
+            }
+            // checkRight(graph[x - 1][y], numberOfLopps, graph[x + 1][y].getMovementCost(), dataMap);
+        }else if (((x==0)&& graph[x][y].data)){
+            if (graph[x+1][y].isFinalNode()) flag=true;
+            else if (graph[x][y-1].isFinalNode()) flag=true;
+            else if(graph[x+1][y-1].isFinalNode()) flag=true;
+            else if (graph[x][y+1].isFinalNode()) flag=true;
+            else if(graph[x+1][y+1].isFinalNode()) flag=true;else {
+                openList.add(graph[x+1][y]);
+                openList.add(graph[x][y-1]);
+                openList.add(graph[x+1][y-1]);
+                openList.add(graph[x][y+1]);
+                openList.add(graph[x+1][y+1]);
+                
+                graph[x+1][y] = isOnClosedList(graph[x+1][y], graph[x][y]);
+                graph[x][y-1] = isOnClosedList(graph[x][y-1], graph[x][y]);
+                graph[x+1][y-1] = isOnClosedList(graph[x+1][y-1], graph[x][y]);
+                graph[x][y+1] = isOnClosedList(graph[x][y+1], graph[x][y]);
+                graph[x+1][y+1] = isOnClosedList(graph[x+1][y+1], graph[x][y]);
+                graph[x+1][y] = isOnClosedList(graph[x+1][y], graph[x][y]);
+            }
+            // checkBottom(graph[x][y - 1], numberOfLopps, graph[x][y + 1].getMovementCost(), dataMap);
+        }else if (((x==numberOfLopps-1)&& graph[x][y].data)){
+            if (graph[x][y+1].isFinalNode()) flag=true;
+            else if (graph[x][y-1].isFinalNode()) flag=true;
+            else if(graph[x-1][y+1].isFinalNode()) flag=true;
+            else if (graph[x-1][y-1].isFinalNode()) flag=true;
+            else if(graph[x-1][y].isFinalNode()) flag=true;
+            else {
+                openList.add(graph[x][y+1]);
+                openList.add(graph[x][y-1]);
+                openList.add(graph[x-1][y+1]);
+                openList.add(graph[x-1][y-1]);
+                openList.add(graph[x-1][y]);
+                
+                graph[x][y+1] = isOnClosedList(graph[x][y+1], graph[x][y]);
+                graph[x][y-1] = isOnClosedList(graph[x][y-1], graph[x][y]);
+                graph[x-1][y+1] = isOnClosedList(graph[x-1][y+1], graph[x][y]);
+                graph[x-1][y-1] = isOnClosedList(graph[x-1][y-1], graph[x][y]);
+                graph[x-1][y] = isOnClosedList(graph[x-1][y], graph[x][y]);
+            }
+            // checkBottomLeft(graph[x - 1][y + 1], numberOfLopps, graph[x - 1][y + 1].getMovementCost(), dataMap);
+        }else if(((y==0)&& graph[x][y].data)) {
+            if (graph[x+1][y].isFinalNode()) flag=true;
+            else if (graph[x-1][y].isFinalNode()) flag=true;
+            else if(graph[x-1][y+1].isFinalNode()) flag=true;
+            else if (graph[x][y+1].isFinalNode()) flag=true;
+            else if(graph[x+1][y+1].isFinalNode()) flag=true;
+            else {
+                openList.add(graph[x+1][y]);
+                openList.add(graph[x-1][y]);
+                openList.add(graph[x-1][y+1]);
+                openList.add(graph[x][y+1]);
+                openList.add(graph[x+1][y+1]);
+                
+                graph[x-1][y] = isOnClosedList(graph[x-1][y], graph[x][y]);
+                graph[x-1][y+1] = isOnClosedList(graph[x-1][y+1], graph[x][y]);
+                graph[x][y+1] = isOnClosedList(graph[x][y+1], graph[x][y]);
+                graph[x+1][y+1] = isOnClosedList(graph[x+1][y+1], graph[x][y]);
+                graph[x+1][y] = isOnClosedList(graph[x+1][y], graph[x][y]);
+            }
+            //checkTop(graph[x - 1][y + 1], numberOfLopps, graph[x - 1][y + 1].getMovementCost(), dataMap);
+        }else{
+            if (graph[x+1][y].isFinalNode()) flag=true;
+            else if (graph[x-1][y].isFinalNode()) flag=true;
+            else if(graph[x-1][y+1].isFinalNode()) flag=true;
+            else if (graph[x][y+1].isFinalNode()) flag=true;
+            else if(graph[x+1][y+1].isFinalNode()) flag=true;
+            else if(graph[x-1][y-1].isFinalNode()) flag=true;
+            else if (graph[x][y-1].isFinalNode()) flag=true;
+            else if(graph[x+1][y-1].isFinalNode()) flag=true;else {
+                //logic
+                openList.add(graph[x+1][y]);
+                openList.add(graph[x-1][y]);
+                openList.add(graph[x-1][y+1]);
+                openList.add(graph[x][y+1]);
+                openList.add(graph[x+1][y+1]);
+                openList.add(graph[x-1][y-1]);
+                openList.add(graph[x][y-1]);
+                openList.add(graph[x+1][y-1]);
+                
+                graph[x+1][y] = isOnClosedList(graph[x+1][y], graph[x][y]);
+                graph[x-1][y] = isOnClosedList(graph[x-1][y], graph[x][y]);
+                graph[x-1][y+1] = isOnClosedList(graph[x-1][y+1], graph[x][y]);
+                graph[x][y+1] = isOnClosedList(graph[x][y+1], graph[x][y]);
+                graph[x+1][y+1] = isOnClosedList(graph[x+1][y+1], graph[x][y]);
+                graph[x-1][y-1] = isOnClosedList(graph[x-1][y-1], graph[x][y]);
+                graph[x][y-1] = isOnClosedList(graph[x][y-1], graph[x][y]);
+                graph[x+1][y-1] = isOnClosedList(graph[x+1][y-1], graph[x][y]);
+            }
+        }
+        return flag;
+    }
+    
+    private static boolean checkNodesManhattan(int x, int y, boolean flag) {
+        if (((x==0)&&(y==0)&& graph[x][y].data)){
+            if (graph[x+1][y].isFinalNode()) flag=true;
+            else if (graph[x][y+1].isFinalNode()) flag=true;
+            else {
+                openList.add(graph[x+1][y]);
+                openList.add(graph[x][y+1]);
+                
+                graph[x+1][y] = isOnClosedList(graph[x+1][y], graph[x][y]);
+                graph[x][y+1] = isOnClosedList(graph[x][y+1], graph[x][y]);
+            }
+            //checkBottomRight(graph[x + 1][y + 1], numberOfLopps, graph[x + 1][y + 1].getMovementCost(), dataMap);
+        }else if (((y==0)&&(x==numberOfLopps-1)&& graph[x][y].data)){
+            if (graph[x][y+1].isFinalNode()) flag=true;
+            else if (graph[x-1][y].isFinalNode()) flag=true;
+            else {
+                openList.add(graph[x][y+1]);
+                openList.add(graph[x-1][y]);
+                
+                graph[x][y+1] = isOnClosedList(graph[x][y+1], graph[x][y]);
+                graph[x-1][y] = isOnClosedList(graph[x-1][y], graph[x][y]);
+            }
+            //checkBottom(graph[x][y + 1], numberOfLopps, graph[x][y + 1].getMovementCost(), dataMap);
+        }else if (((y==numberOfLopps-1)&&(x==numberOfLopps-1)&& graph[x][y].data)){
+            if (graph[x][y-1].isFinalNode()) flag=true;
+            else if (graph[x-1][y].isFinalNode()) flag=true;
+            else {
+                openList.add(graph[x][y-1]);
+                openList.add(graph[x-1][y]);
+                
+                graph[x][y-1] = isOnClosedList(graph[x][y-1], graph[x][y]);
+                graph[x-1][y] = isOnClosedList(graph[x-1][y], graph[x][y]);
+            }
+            //checkLeft(graph[x - 1][y], numberOfLopps, graph[x - 1][y].getMovementCost(), dataMap);
+        }else if (((y==numberOfLopps-1)&&(x==0)&& graph[x][y].data)){
+            if (graph[x+1][y].isFinalNode()) flag=true;
+            else if (graph[x][y-1].isFinalNode()) flag=true;
+            else {
+                openList.add(graph[x+1][y]);
+                openList.add(graph[x][y-1]);
+                
+                graph[x+1][y] = isOnClosedList(graph[x+1][y], graph[x][y]);
+                graph[x][y-1] = isOnClosedList(graph[x][y-1], graph[x][y]);
+            }
+            //checkRight(graph[x][y-1], numberOfLopps, graph[x + 1][y].getMovementCost(), dataMap);
+        }else if (((y==numberOfLopps-1)&& graph[x][y].data)){
+            if (graph[x+1][y].isFinalNode()) flag=true;
+            else if (graph[x][y-1].isFinalNode()) flag=true;
+            else if(graph[x-1][y].isFinalNode()) flag=true;
+            else {
+                openList.add(graph[x + 1][y]);
+                openList.add(graph[x][y - 1]);
+                openList.add(graph[x - 1][y]);
+                
+                graph[x+1][y] = isOnClosedList(graph[x+1][y], graph[x][y]);
+                graph[x][y - 1] = isOnClosedList(graph[x][y-1], graph[x][y]);
+               graph[x - 1][y] = isOnClosedList(graph[x-1][y], graph[x][y]);
+            }
+            // checkRight(graph[x - 1][y], numberOfLopps, graph[x + 1][y].getMovementCost(), dataMap);
+        }else if (((x==0)&& graph[x][y].data)){
+            if (graph[x+1][y].isFinalNode()) flag=true;
+            else if (graph[x][y-1].isFinalNode()) flag=true;
+            else if (graph[x][y+1].isFinalNode()) flag=true;
+            else if(graph[x+1][y+1].isFinalNode()) flag=true;
+            else {
+                openList.add(graph[x+1][y]);
+                openList.add(graph[x][y-1]);
+                openList.add(graph[x][y+1]);
+                
+                graph[x+1][y] = isOnClosedList(graph[x+1][y], graph[x][y]);
+                graph[x][y-1] = isOnClosedList(graph[x][y-1], graph[x][y]);
+                graph[x][y+1] = isOnClosedList(graph[x][y+1], graph[x][y]);
+                graph[x+1][y] = isOnClosedList(graph[x+1][y], graph[x][y]);
+            }
+            // checkBottom(graph[x][y - 1], numberOfLopps, graph[x][y + 1].getMovementCost(), dataMap);
+        }else if (((x==numberOfLopps-1)&& graph[x][y].data)){
+            if (graph[x][y+1].isFinalNode()) flag=true;
+            else if (graph[x][y-1].isFinalNode()) flag=true;
+            else if(graph[x-1][y].isFinalNode()) flag=true;
+            else {
+                openList.add(graph[x][y+1]);
+                openList.add(graph[x][y-1]);
+                openList.add(graph[x-1][y]);
+                
+                graph[x][y+1] = isOnClosedList(graph[x][y+1], graph[x][y]);
+                graph[x][y-1] = isOnClosedList(graph[x][y-1], graph[x][y]);
+                graph[x-1][y] = isOnClosedList(graph[x-1][y], graph[x][y]);
+            }
+            // checkBottomLeft(graph[x - 1][y + 1], numberOfLopps, graph[x - 1][y + 1].getMovementCost(), dataMap);
+        }else if(((y==0)&& graph[x][y].data)) {
+            if (graph[x+1][y].isFinalNode()) flag=true;
+            else if (graph[x-1][y].isFinalNode()) flag=true;
+            else if (graph[x][y+1].isFinalNode()) flag=true;
+            else {
+                openList.add(graph[x+1][y]);
+                openList.add(graph[x-1][y]);
+                openList.add(graph[x][y+1]);
+                
+                graph[x-1][y] = isOnClosedList(graph[x-1][y], graph[x][y]);
+                graph[x][y+1] = isOnClosedList(graph[x][y+1], graph[x][y]);
+                graph[x+1][y] = isOnClosedList(graph[x+1][y], graph[x][y]);
+            }
+            //checkTop(graph[x - 1][y + 1], numberOfLopps, graph[x - 1][y + 1].getMovementCost(), dataMap);
+        }else{
+            if (graph[x+1][y].isFinalNode()) flag=true;
+            else if (graph[x-1][y].isFinalNode()) flag=true;
+            else if (graph[x][y+1].isFinalNode()) flag=true;
+            else if(graph[x-1][y-1].isFinalNode()) flag=true;
+            else if (graph[x][y-1].isFinalNode()) flag=true;
+            else {
+                //logic
+                openList.add(graph[x+1][y]);
+                openList.add(graph[x-1][y]);
+                openList.add(graph[x][y+1]);
+                openList.add(graph[x][y-1]);
+                
+                graph[x+1][y] = isOnClosedList(graph[x+1][y], graph[x][y]);
+                graph[x-1][y] = isOnClosedList(graph[x-1][y], graph[x][y]);
+                graph[x][y+1] = isOnClosedList(graph[x][y+1], graph[x][y]);
+                graph[x][y-1] = isOnClosedList(graph[x][y-1], graph[x][y]);
+            }
+        }
+        return flag;
     }
 
     private static Node isOnClosedList(Node nodeToCheckIfOnClosedList, Node nodeToCheckAgainst) {
@@ -383,6 +548,7 @@ public class PathFindingOnSquaredGrid {
         int awayFromX=0;
         int awayFromY=0;
         int anchorPoint=0;
+        System.out.println(x1+ "asd" + y1);
         graph[x1][y1].setFinalNode(true);
 
         //finalIPosition = y1;
@@ -472,10 +638,20 @@ public class PathFindingOnSquaredGrid {
         System.out.println("Enter j for B > ");
         int Bj = in.nextInt();
 
+        StdDraw.setPenRadius(0.007);
 
         getShortestPathAlgorithm(N);
-        //getChebyshevDistance(Aj, Ai, Bj, Bi, N);
         getManhattanDistance(Aj, Ai, Bj, Bi, N);
+        int manhattenDistanceCost =  (numberOfStraightMoves + (numberOfDiagonalMoves*2));
+        System.out.println(manhattenDistanceCost);
+        numberOfStraightMoves = 0;
+        numberOfDiagonalMoves = 0;
+        getChebyshevDistance(Aj, Ai, Bj, Bi, N);
+        
+        int chebyshevDistanceCost =  (numberOfStraightMoves + numberOfDiagonalMoves);
+        System.out.println(chebyshevDistanceCost);
+        numberOfStraightMoves = 0;
+        numberOfDiagonalMoves = 0;
         for (Node n : closedList) {
             if (n == null){
                 break;
@@ -485,16 +661,15 @@ public class PathFindingOnSquaredGrid {
         // Stop the clock ticking in order to capture the time being spent on inputting the coordinates
         // You should position this command accordingly in order to perform the algorithmic analysis
         StdOut.println("Elapsed time = " + timerFlow.elapsedTime());
-        int manhattenDistance1 = ((Ai - Bi) < 0) ? ((Ai - Bi)*-1) : ((Ai - Bi));
-        int manhattenDistance2 = (((Aj - Bj)) < 0) ? (((Aj - Bj))*-1) : ((Aj - Bj));
-        int manhattenDistance = manhattenDistance1+manhattenDistance2;
+        
 
         double euclideanDistance = Math.sqrt((((Ai - Bi)*(Ai - Bi))+((Aj - Bj)*(Aj - Bj))));
-        StdOut.println("Manhattan distance: " + manhattenDistance);
         StdOut.println("Euclidean distance: " + euclideanDistance);
 
-
+        StdDraw.setPenRadius();
         show(randomlyGenMatrix, true, Ai, Aj, Bi, Bj);
+        StdDraw.setPenRadius(0.007);
+        getEuclideanDistance(Aj, Ai, Bj, Bi, N);
     }
 
 
